@@ -1,10 +1,19 @@
+import { Outlet, Link } from "react-router-dom";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Team Tech Stark</h1>
-      <h3>Smart India Hackathon 2022</h3>
+    <div>
+      <nav
+        style={{
+          borderBottom: "solid 1px",
+          paddingBottom: "1rem",
+        }}
+      >
+        <Link to="/">Home</Link>{" "}|{" "}
+        <Link to="/login">Login</Link>
+      </nav>
+      <Outlet />
     </div>
   );
 }
