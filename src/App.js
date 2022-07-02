@@ -1,3 +1,4 @@
+import Check from "./components/Check";
 import { Outlet, Link } from "react-router-dom";
 import "./App.css";
 
@@ -10,10 +11,10 @@ function App() {
           paddingBottom: "1rem",
         }}
       >
-        <Link to="/">Home</Link>{" "}|{" "}
-        <Link to="/login">Login</Link>
+        <Link to="/">Home</Link> | <Link to="/login">Login</Link>
       </nav>
       <Outlet />
+      <Check></Check>
     </div>
   );
 }
