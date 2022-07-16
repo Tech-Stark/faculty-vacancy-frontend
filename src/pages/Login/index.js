@@ -53,7 +53,7 @@ const Login = () => {
   const navigate = useNavigate();
   const {isLoading} = useSelector((state) => state.auth);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, resetForm) => {
     console.log(values);
     dispatch(setLoading(true));
     axios.post(`${BASE_URL}users/login`, values, configToken())
@@ -61,6 +61,7 @@ const Login = () => {
         console.log(res.data);
         dispatch(setLoading(false));
         dispatch(signIn(res.data));
+        resetForm();
         navigate('/');
         dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
       })
@@ -106,7 +107,7 @@ const Login = () => {
                   .min(8, 'Password is minimum 8 characters in length.')
                   .required("This field is required!"),
               })}
-              onSubmit={(values)=> handleSubmit(values)}
+              onSubmit={(values, {resetForm})=> handleSubmit(values, resetForm)}
             >
               <Form>
                 <Grid container spacing={1}>

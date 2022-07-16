@@ -94,7 +94,7 @@ const SignUp = () => {
       .oneOf([Yup.ref("password")], "Password does not match!"),
   });
 
-  const handleSubmit = ({values, resetForm}) => {
+  const handleSubmit = (values, resetForm) => {
     console.log(values);
     dispatch(setLoading(true));
     axios.post(`${BASE_URL}users/register`, values, configToken())
@@ -103,7 +103,7 @@ const SignUp = () => {
         if(res.data.success) {
           resetForm();
           dispatch(setLoading(false));
-          dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
+          dispatch(addToast({type: 'success', message: 'Your account is created successfully!'}));
           navigate('/login');
         }
       })
