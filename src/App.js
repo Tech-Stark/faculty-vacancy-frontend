@@ -1,22 +1,16 @@
-import { Outlet, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
+import Typography from '@mui/material/Typography';
 import "./App.css";
+import ToastList from './components/ToastList';
 
 function App() {
-  const { isLoggedIn } = useSelector((state) => state.auth);
   return (
     <div className="App">
-      <nav
-        style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem",
-        }}
-      >
-        <Link to="/">Home</Link> |{" "}
-        {!isLoggedIn && <Link to="/login">Login/Sign Up</Link>}
-        {isLoggedIn && <a href="#">Logout</a>}
-      </nav>
+      <ToastList />
       <Outlet />
+      <Typography variant="body2" color="text.secondary" style={{ width: "100%", position: 'absolute', bottom: 0, paddingBottom: 12, textAlign: 'center' }}>
+        {'Copyright © | Tech Stark | '}{' '}{new Date().getFullYear()}{'.'}
+      </Typography>
     </div>
   );
 }
