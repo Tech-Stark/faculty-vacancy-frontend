@@ -48,7 +48,7 @@ const MyTextInput = (props) => {
   );
 };
 
-const Login = () => {
+const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
@@ -180,19 +180,6 @@ const Login = () => {
                 </Button>
               </Form>
             </Formik>
-
-            <Grid container>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/signup" style={{ textDecoration: "none" }}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/admin/login" style={{ textDecoration: "none" }}>
-                  {"Admin Login"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>
@@ -200,4 +187,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;
