@@ -48,14 +48,14 @@ const MyTextInput = (props) => {
   );
 };
 
-const Login = () => {
+const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading } = useSelector((state) => state.auth);
 
-  const handleSubmit = (values, resetForm) => {
+  const handleSubmit = (values) => {
     console.log(values);
     dispatch(setLoading(true));
     axios
@@ -64,9 +64,10 @@ const Login = () => {
         console.log(res.data);
         dispatch(setLoading(false));
         dispatch(signIn(res.data));
-        resetForm();
-        navigate('/');
-        dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
+        navigate("/");
+        dispatch(
+          addToast({ type: "success", message: "Successfully logged in!" })
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -109,7 +110,7 @@ const Login = () => {
                   .min(8, "Password is minimum 8 characters in length.")
                   .required("This field is required!"),
               })}
-              onSubmit={(values, {resetForm})=> handleSubmit(values, resetForm)}
+              onSubmit={(values) => handleSubmit(values)}
             >
               <Form>
                 <Grid container spacing={1}>
@@ -179,19 +180,6 @@ const Login = () => {
                 </Button>
               </Form>
             </Formik>
-
-            <Grid container>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/signup" style={{ textDecoration: "none" }}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/admin/login" style={{ textDecoration: "none" }}>
-                  {"Admin Login"}
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Container>
@@ -199,4 +187,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;
