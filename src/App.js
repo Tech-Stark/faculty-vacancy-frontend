@@ -1,10 +1,20 @@
+import { useEffect } from 'react';
 import { Outlet } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import "./App.css";
 import ToastList from "./components/ToastList";
 import TempNavbar from "./components/TempNavbar";
+import { useDispatch } from "react-redux";
+import { loadUser } from "./redux/features/auth/authSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="App">
       <TempNavbar />
@@ -21,7 +31,5 @@ function App() {
     </div>
   );
 }
-
-//position: 'absolute', bottom: 0
 
 export default App;
