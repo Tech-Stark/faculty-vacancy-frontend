@@ -47,7 +47,7 @@ function TeacherVacancy() {
         handleSubsVacancies(res.data);
       })
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [token]);
 
   const handleAllVacancyToggle = () => {
     setVacancyToggle(true);

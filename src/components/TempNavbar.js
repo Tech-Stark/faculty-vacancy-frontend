@@ -18,10 +18,10 @@ import { addToast } from "../redux/features/toast/toastSlice";
 
 const Teacherpages = [
   { Name: "Vacancies", pagePath: "vacancy" },
-  { Name: "Subscriptions", pagePath: "" },
+  { Name: "Subscriptions", pagePath: "subscriptions" },
   { Name: "Profile", pagePath: "profile" },
 ];
-const Adminpages = ["Vacancies", "Add Teachers", "View Teachers"];
+//const Adminpages = ["Vacancies", "Add Teachers", "View Teachers"];
 
 const TempNavbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

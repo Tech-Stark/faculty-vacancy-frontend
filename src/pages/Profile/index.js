@@ -1,6 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import ReactDOM from "react-dom";
+import { useSelector } from "react-redux";
 import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import depts from "../department_data.json";
@@ -80,7 +79,6 @@ const validationSchema = Yup.object({
 // };
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.auth);
   console.log(isLoggedIn);
   return (

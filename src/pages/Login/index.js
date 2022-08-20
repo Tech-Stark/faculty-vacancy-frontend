@@ -105,9 +105,9 @@ const Login = () => {
                 email: Yup.string()
                   .email("Invalid email address!")
                   .required("This field is required!"),
-                password: Yup.string()
-                  .min(8, "Password is minimum 8 characters in length.")
-                  .required("This field is required!"),
+                // password: Yup.string()
+                //   .min(8, "Password is minimum 8 characters in length.")
+                //   .required("This field is required!"),
               })}
               onSubmit={(values, {resetForm})=> handleSubmit(values, resetForm)}
             >
