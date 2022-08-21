@@ -4,7 +4,15 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../utils/api";
 import VacancyCard from "../../components/VacancyCard";
-import { Grid, Tabs, Tab } from "@mui/material";
+import {
+  Grid,
+  Tabs,
+  Tab,
+  Typography,
+  Container,
+  CssBaseline,
+  Box,
+} from "@mui/material";
 
 function TeacherVacancy() {
   //true->All vacancies; false->subscribed Vacancies
@@ -60,16 +68,29 @@ function TeacherVacancy() {
   const subsVacanciesCardList = arrtoCard(subsVacancies);
 
   return (
-    <>
-      <h1>Vacancies</h1>
-      <Tabs value={vacancyToggle ? 0 : 1} centered>
-        <Tab label="All Vacancies" onClick={handleAllVacancyToggle} />
-        <Tab label="Subscribed Vacancies" onClick={handleSubsVacancyToggle} />
-      </Tabs>
-      <Grid container spacing={2} justifyContent="center">
-        {vacancyToggle ? allVacanciesCardList : subsVacanciesCardList}
-      </Grid>
-    </>
+    <Container component="main" maxWidth="lg">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h3" gutterBottom>
+          Vacancies
+        </Typography>
+        <Tabs value={vacancyToggle ? 0 : 1} centered>
+          <Tab label="All Vacancies" onClick={handleAllVacancyToggle} />
+          <Tab label="Subscribed Vacancies" onClick={handleSubsVacancyToggle} />
+        </Tabs>
+        <Grid container spacing={2} justifyContent="center">
+          {vacancyToggle ? allVacanciesCardList : subsVacanciesCardList}
+        </Grid>
+      </Box>
+    </Container>
   );
 }
 
