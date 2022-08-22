@@ -9,6 +9,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 import { BASE_URL, configToken } from "../../utils/api";
 import { addToast } from "../../redux/features/toast/toastSlice";
 
@@ -97,18 +99,30 @@ export default function SubscriptionCard({ item, subscribe }) {
     <Box sx={{ minWidth: 275 }}>
       <Card>
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography variant="h6" gutterBottom>
             {item.department}
           </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            Colleges :
+          </Typography>
+          <div>
+            <ul>
+              {item.colleges.map((item, index) => (
+                <li key={index}>
+                  <Typography variant="body2" gutterBottom>{item}</Typography>
+                </li>
+              ))}
+            </ul>
+          </div>
         </CardContent>
         <CardActions>
           {showStatus === "subscribed" ? (
-            <Typography sx={{ fontSize: 14 }} color="text.success" gutterBottom>
-              Subscribed!
+            <Typography sx={{ fontSize: 14, mx: "auto", color: "green" }} gutterBottom>
+              <CheckCircleIcon fontSize="small" />{" "} Subscribed!
             </Typography>
           ) : showStatus === "unsubscribed" ? (
-            <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
-              Unsubscribed!
+            <Typography sx={{ fontSize: 14, mx: "auto" }} color="primary" gutterBottom>
+              <CheckCircleIcon fontSize="small" />{" "} Unsubscribed!
             </Typography>
           ) : (
             <Button
