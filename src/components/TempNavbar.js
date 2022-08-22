@@ -132,9 +132,8 @@ const TempNavbar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {Teacherpages.map((page) => (
-              <Link to={`/${page.pagePath}`}>
+              <Link to={`/${page.pagePath}`} key={page.Name}>
                 <Button
-                  key={page.Name}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
