@@ -95,7 +95,7 @@ const validationSchema = Yup.object({
     "DOJ can not be in future!"
   ),
   department: Yup.string().required("Required"),
-  phoneNo: Yup.number().required("Required"),
+  phoneNumber: Yup.number().required("Required"),
 });
 
 function Biodata() {
@@ -122,10 +122,9 @@ function Biodata() {
   console.log(userData);
 
   const handleSubmit = (values) => {
-    const user = { ...values };
     const profile = { ...userData.profile };
     const postObj = {
-      user,
+      values,
       profile,
     };
     console.log(postObj);
@@ -169,9 +168,10 @@ function Biodata() {
             isOpenToWork: userData.user.isOpenToWork,
             department: userData.user.department,
             position: userData.user.position,
-            college: "",
+            collegeName: userData.user.collegeName,
+            collegeId: userData.user.collegeId,
             dateJoined: userData.user.dateJoined,
-            phoneNo: "",
+            phoneNumber: userData.user.phoneNumber,
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => handleSubmit(values)}
@@ -212,7 +212,7 @@ function Biodata() {
                 <Typography variant="subtitle1" gutterBottom>
                   Phone Number
                 </Typography>
-                <MyTextInput name="phoneNo" type="number" />
+                <MyTextInput name="phoneNumber" type="number" />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1" gutterBottom>
@@ -222,9 +222,19 @@ function Biodata() {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1" gutterBottom>
-                  College
+                  College Name
                 </Typography>
-                <MyTextInput label="College" name="college" type="text" />
+                <MyTextInput
+                  label="collegeName"
+                  name="collegeName"
+                  type="text"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" gutterBottom>
+                  College ID
+                </Typography>
+                <MyTextInput name="collegeId" type="text" />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1" gutterBottom>
