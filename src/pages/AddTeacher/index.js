@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, signIn } from "../../redux/features/auth/authSlice";
+import { setLoading } from "../../redux/features/auth/authSlice";
 import { addToast } from "../../redux/features/toast/toastSlice";
 
 import { Formik, Form, useField } from "formik";
@@ -12,18 +11,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import EmailIcon from "@mui/icons-material/Email";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
@@ -63,18 +57,18 @@ const MyCheckbox = ({ children, ...props }) => {
   );
 };
 
-const MySelect = ({ label, ...props }) => {
-  const [field, meta] = useField(props);
-  return (
-    <div>
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <select {...field} {...props} />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
-    </div>
-  );
-};
+// const MySelect = ({ label, ...props }) => {
+//   const [field, meta] = useField(props);
+//   return (
+//     <div>
+//       <label htmlFor={props.id || props.name}>{label}</label>
+//       <select {...field} {...props} />
+//       {meta.touched && meta.error ? (
+//         <div className="error">{meta.error}</div>
+//       ) : null}
+//     </div>
+//   );
+// };
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("This field is required!"),
@@ -100,29 +94,28 @@ const AddTeacher = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, token } = useSelector((state) => state.auth);
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
-    // dispatch(setLoading(true));
-    // axios
-    //   .post(`${BASE_URL}users/login`, values, configToken())
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     dispatch(setLoading(false));
-    //     dispatch(signIn(res.data));
-    //     resetForm();
-    //     navigate("/");
-    //     dispatch(
-    //       addToast({ type: "success", message: "Successfully logged in!" })
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     dispatch(setLoading(false));
-    //     dispatch(addToast({ type: "error", message: err.error }));
-    //   });
+    dispatch(setLoading(true));
+    axios
+      .post(`${BASE_URL}admin/createteacher`, values, configToken(token))
+      .then((res) => {
+        console.log(res.data);
+        dispatch(setLoading(false));
+        resetForm();
+        dispatch(
+          addToast({ type: "success", message: "Successfully added teacher!" })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(setLoading(false));
+        dispatch(
+          addToast({ type: "error", message: "Could not add teacher." })
+        );
+      });
   };
 
   return (
