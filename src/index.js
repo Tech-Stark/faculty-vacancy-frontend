@@ -16,6 +16,7 @@ import AddTeacher from "./pages/AddTeacher";
 import ViewTeachers from "./pages/ViewTeachers";
 import Dashboard from "./pages/AdminDashboard";
 import AdminVacancy from "./pages/AdminVacancy";
+import SendEmail from "./pages/SendEmail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -34,6 +35,7 @@ root.render(
             <Route path="admin/addteacher" element={<AddTeacher />} />
             <Route path="admin/viewteachers" element={<ViewTeachers />} />
             <Route path="admin/dashboard" element={<Dashboard />} />
+            <Route path="admin/sendmail/:jobId" element={<SendEmail />} />
             <Route path="admin/vacancy" element={<AdminVacancy />} />
           </Route>
         </Routes>

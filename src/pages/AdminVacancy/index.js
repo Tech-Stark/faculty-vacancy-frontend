@@ -1,42 +1,51 @@
-import * as React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import {useState} from 'react';
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid } from "@mui/material";
-import OngoingVacancyCard from "../../components/OngoingVacancyCard";
-import PendingVacancyCard from "../../components/PendingVacancyCard";
+import Grid from "@mui/material/Grid";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Ongoing from "./Ongoing";
+import Pending from "./Pending";
+import Completed from "./Completed";
 
 export default function AdminVacancy() {
+  const[value, setValue] = useState('one');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography>Ongoing</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <OngoingVacancyCard />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography>Pending</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <PendingVacancyCard />
-          </AccordionDetails>
-        </Accordion>
-      </Grid>
-    </Grid>
+    <Container component="main" maxWidth="lg">
+        <CssBaseline />
+        <Box
+        sx={{
+            marginTop: 4,
+            marginBottom: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        }}
+        >
+            <Typography variant="h3" gutterBottom>
+                Vacancies
+            </Typography>
+
+            <Grid container spacing={2} justifyContent="center">
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                >
+                    <Tab value="one" label="Pending" />
+                    <Tab value="two" label="Ongoing" />
+                    <Tab value="three" label="Completed" />
+                </Tabs>
+            </Grid>
+
+            {value === 'one' ? <Pending /> : value === 'two' ? <Ongoing /> : <Completed />}
+        </Box>
+    </Container>
   );
 }
