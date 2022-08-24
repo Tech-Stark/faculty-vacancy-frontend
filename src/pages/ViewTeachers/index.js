@@ -23,7 +23,7 @@ const ViewTeachers = () => {
             axios
                 .get(`${BASE_URL}admin/getallteachers`, configToken(token))
                 .then((response) => {
-                  //console.log(response.data);
+                  console.log(response.data);
                   setTeachersData(response.data);
                   setIsLoading(false);
                 })
@@ -47,6 +47,9 @@ const ViewTeachers = () => {
           <b>Date of Joining : </b>{" "}{modalData.dateJoined?.split('T')[0]}<br/>
           <b>Date of Birth : </b>{" "}{modalData.dob?.split('T')[0]}<br />
           <b>Currently Available to Join : </b>{" "}{modalData.isOpenToWork ? "Yes" : "No"}<br/>
+          <b>College : </b>{modalData.collegeName}<br/>
+          <b>Department : </b>{modalData.department}<br/>
+          <b>Role : </b>{modalData.position}<br/>
         </>  
       )
     }
@@ -63,7 +66,7 @@ const ViewTeachers = () => {
                 </Typography>
               );
             },
-            customWidth: "30%"
+            customWidth: "15%"
           },
           {
             Header: 'First Name',
@@ -76,7 +79,7 @@ const ViewTeachers = () => {
           {
             Header: 'Email',
             accessor: 'email',
-            customWidth: "30%"
+            customWidth: "15%"
           },
           {
             Header: 'Available to Work',
@@ -88,7 +91,24 @@ const ViewTeachers = () => {
                 </Typography>
               );
             },
-            customWidth: "20%"
+          },
+          {
+            Header: 'College',
+            accessor: 'collegeName',
+            customWidth: '20%',
+            Filter: SelectColumnFilter,
+          },
+          {
+            Header: 'Department',
+            accessor: 'department',
+            customWidth: '20%',
+            Filter: SelectColumnFilter,
+          },
+          {
+            Header: 'Role',
+            accessor: 'position',
+            customWidth: '15%',
+            Filter: SelectColumnFilter,
           },
           {
             Header: '',
@@ -101,12 +121,12 @@ const ViewTeachers = () => {
                   </Button>
               );
             },
-            customWidth: "20%"
+            customWidth: "15%"
           }
         ],
     []);
         
-  const initialState = {hiddenColumns: ['firstName', 'lastName'], pageSize: 5 };
+  const initialState = {hiddenColumns: ['firstName', 'lastName', 'isOpenToWork'], pageSize: 5 };
   return (
     <Container component="main" maxWidth="lg">
         <DetailDialog open={open} setOpen={setOpen} modalContent={modalContent} title="Details" />

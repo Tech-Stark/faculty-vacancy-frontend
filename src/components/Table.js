@@ -98,10 +98,10 @@ export function SelectColumnFilter({
             name={id}
             value={filterValue}
             onChange={(e) => {
-                setFilter(e.target.value || undefined);
+                setFilter(e.target.value || '');
               }}
         >
-            <MenuItem value="">All</MenuItem>
+            <MenuItem value=''>All</MenuItem>
                 {options.map((option, i) => (
                     <MenuItem key={i} value={option}>{option}</MenuItem>
             ))}
