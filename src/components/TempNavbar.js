@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { signOut } from "../redux/features/auth/authSlice";
 import { addToast } from "../redux/features/toast/toastSlice";
 
@@ -53,14 +53,13 @@ const TempNavbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{backgroundColor: '#263354'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -105,9 +104,9 @@ const TempNavbar = () => {
             >
               {Teacherpages.map((page) => (
                 <MenuItem key={page.Name} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page.pagePath}`}>
+                  <NavLink to={`/${page.pagePath}`}>
                     <Typography textAlign="center">{page.Name}</Typography>
-                  </Link>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
@@ -132,14 +131,14 @@ const TempNavbar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {Teacherpages.map((page) => (
-              <Link to={`/${page.pagePath}`} key={page.Name}>
+              <NavLink to={`/${page.pagePath}`} key={page.Name}>
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
                   {page.Name}
                 </Button>
-              </Link>
+              </NavLink>
             ))}
           </Box>
 
@@ -173,9 +172,9 @@ const TempNavbar = () => {
                 </MenuItem>
               ) : (
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Link to="/login">
+                  <NavLink to="/login">
                     <Typography textAlign="center">Login</Typography>
-                  </Link>
+                  </NavLink>
                 </MenuItem>
               )}
             </Menu>

@@ -16,7 +16,7 @@ import {
 
 function TeacherVacancy() {
   //true->All vacancies; false->subscribed Vacancies
-  const { token } = useSelector((state) => state.auth);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
   const [vacancyToggle, setVacancyToggle] = useState(true);
   const [allVacancies, setAllVacancies] = useState([]);
   const [subsVacancies, setSubsVacancies] = useState([]);
@@ -66,6 +66,24 @@ function TeacherVacancy() {
 
   const allVacanciesCardList = arrtoCard(allVacancies);
   const subsVacanciesCardList = arrtoCard(subsVacancies);
+
+  if(!isLoggedIn){
+    return(
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          You are not Logged In!
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Container component="main" maxWidth="lg">

@@ -13,6 +13,8 @@ import TeacherVacancy from "./pages/TeacherVacancy";
 import Subscriptions from "./pages/Subscriptions";
 import Biodata from "./pages/Profile/Biodata";
 import AddTeacher from "./pages/AddTeacher";
+import ViewTeachers from "./pages/ViewTeachers";
+import Dashboard from "./pages/AdminDashboard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -29,6 +31,8 @@ root.render(
             <Route path="admin/login" element={<AdminLogin />} />
             <Route path="subscriptions" element={<Subscriptions />} />
             <Route path="admin/addteacher" element={<AddTeacher />} />
+            <Route path="admin/viewteachers" element={<ViewTeachers />} />
+            <Route path="admin/dashboard" element={<Dashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -59,8 +59,9 @@ const AdminLogin = () => {
     console.log(values);
     dispatch(setLoading(true));
     axios
-      .post(`${BASE_URL}users/login`, values, configToken())
+      .post(`${BASE_URL}admin/login`, values, configToken())
       .then((res) => {
+        Object.assign(res.data, {isAdmin: true});
         console.log(res.data);
         dispatch(setLoading(false));
         dispatch(signIn(res.data));
@@ -107,7 +108,7 @@ const AdminLogin = () => {
                   .email("Invalid email address!")
                   .required("This field is required!"),
                 password: Yup.string()
-                  .min(8, "Password is minimum 8 characters in length.")
+                  //.min(8, "Password is minimum 8 characters in length.")
                   .required("This field is required!"),
               })}
               onSubmit={(values) => handleSubmit(values)}

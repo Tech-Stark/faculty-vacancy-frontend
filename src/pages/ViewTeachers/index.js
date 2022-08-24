@@ -1,5 +1,118 @@
-import React from "react";
+import {useMemo, useState, useEffect} from 'react';
+import { useSelector } from "react-redux";
+import axios from 'axios';
+import {BASE_URL, configToken} from '../../utils/api';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import TableComponent from '../../components/Table';
+import { SelectColumnFilter } from '../../components/Table';
+import DetailDialog from '../Subscriptions/DetailDialog';
+import Button from '@mui/material/Button';
 
-export default function ViewTeachers() {
-  return <div>ViewTeachers</div>;
+const ViewTeachers = () => {
+    const[teachersData, setTeachersData] = useState([]);
+    const[modalData, setModalData] = useState({});
+    const[isLoading, setIsLoading] = useState(false);    
+    const [open, setOpen] = useState(false);
+
+    const { isLoggedIn, token } = useSelector((state) => state.auth);
+
+    useEffect(() =>{
+        if(isLoggedIn){
+          setIsLoading(true);
+            axios
+                .get(`${BASE_URL}admin/getallteachers`, configToken(token))
+                .then((response) => {
+                  //console.log(response.data);
+                  setTeachersData(response.data);
+                  setIsLoading(false);
+                })
+                .catch(err => {
+                  setIsLoading(false);
+                  setTeachersData([]);
+                });
+        }
+    }, [isLoggedIn, token]);
+
+    const handleClickOpen = (data) => {
+      setModalData(data);
+      setOpen(true);
+    };
+
+    const modalContent = () =>{
+      return(
+        <>
+          <b>Name : </b>{" "}{modalData.firstName}{" "}{modalData.lastName}<br/>
+          <b>Email : </b>{" "}{modalData.email}<br/>
+          <b>Date of Joining : </b>{" "}{modalData.dateJoined?.split('T')[0]}<br/>
+          <b>Date of Birth : </b>{" "}{modalData.dob?.split('T')[0]}<br />
+          <b>Currently Available to Join : </b>{" "}{modalData.isOpenToWork ? "Yes" : "No"}<br/>
+        </>  
+      )
+    }
+
+    const columns = useMemo(
+        () => [
+          {
+            Header: 'Name',
+            id: 'name',
+            Cell: (d) => {
+              return (
+                <Typography variant="body1">
+                  {d.row.original.firstName}{" "}{d.row.original.lastName}
+                </Typography>
+              );
+            },
+            customWidth: "30%"
+          },
+          {
+            Header: 'First Name',
+            accessor: 'firstName',
+          },
+          {
+            Header: 'Last Name',
+            accessor: 'lastName',
+          },
+          {
+            Header: 'Email',
+            accessor: 'email',
+            customWidth: "30%"
+          },
+          {
+            Header: 'Available to Work',
+            id: "isOpenToWork",
+            Cell: (d) => {
+              return (
+                <Typography variant="body1">
+                  {d.row.original.isOpenToWork ? 'Yes': 'No'}
+                </Typography>
+              );
+            },
+            customWidth: "20%"
+          },
+          {
+            Header: '',
+            id: "button",
+            Cell: (d) => {
+              return (
+                  <Button variant="contained" color="primary" size="small" 
+                    onClick={() =>handleClickOpen(d.row.original)}>
+                    View Details
+                  </Button>
+              );
+            },
+            customWidth: "20%"
+          }
+        ],
+    []);
+        
+  const initialState = {hiddenColumns: ['firstName', 'lastName'], pageSize: 5 };
+  return (
+    <Container component="main" maxWidth="lg">
+        <DetailDialog open={open} setOpen={setOpen} modalContent={modalContent} title="Details" />
+        <TableComponent columns={columns} data={teachersData} initialState={initialState} isLoading={isLoading} />
+    </Container>
+  )
 }
+
+export default ViewTeachers;

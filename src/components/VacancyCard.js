@@ -8,7 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -48,11 +48,9 @@ export default function VacancyCard({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="apply">
-          <Button variant="contained" color="success">
-            Apply
-          </Button>
-        </IconButton>
+        <Button variant="contained" color="success">
+          Apply
+        </Button>
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}

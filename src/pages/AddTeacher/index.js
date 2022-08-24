@@ -22,8 +22,10 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { BASE_URL, configToken } from "../../utils/api";
+import { useEffect } from "react";
 
 const theme = createTheme();
+
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -92,9 +94,21 @@ const validationSchema = Yup.object({
 
 const AddTeacher = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [dept,setDept]=useState([]);
 
   const dispatch = useDispatch();
-  const { isLoading, token } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn,token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if(isLoggedIn){
+      dispatch(setLoading(true));
+      axios.get(`${BASE_URL}admin/getmycollegedata`,configToken(token))
+      .then((response) =>{
+        console.log(response.data)
+      })
+      .catch((err)=>console.log(err.message))
+    }
+  },[isLoggedIn,token])
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);

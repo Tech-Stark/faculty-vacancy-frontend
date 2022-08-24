@@ -44,6 +44,24 @@ const Subscriptions = () => {
         setValue(newValue);
     };
 
+    if(!isLoggedIn){
+        return(
+          <Box
+            sx={{
+              marginTop: 4,
+              marginBottom: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4" gutterBottom>
+              You are not Logged In!
+            </Typography>
+          </Box>
+        );
+      }
+
     return (
             <Container component="main" maxWidth="lg">
                 <CssBaseline />
@@ -64,8 +82,6 @@ const Subscriptions = () => {
                         <Tabs
                             value={value}
                             onChange={handleChange}
-                            textColor="secondary"
-                            indicatorColor="secondary"
                         >
                             <Tab value="one" label="My Subscriptions" />
                             <Tab value="two" label="Create Subscriptions" />

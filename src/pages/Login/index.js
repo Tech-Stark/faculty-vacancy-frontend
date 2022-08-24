@@ -10,6 +10,7 @@ import * as Yup from "yup";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
@@ -61,12 +62,19 @@ const Login = () => {
     axios
       .post(`${BASE_URL}users/login`, values, configToken())
       .then((res) => {
-        console.log(res.data);
-        dispatch(setLoading(false));
-        dispatch(signIn(res.data));
-        resetForm();
-        navigate('/');
-        dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
+        if(res.data.error){
+          dispatch(setLoading(false));
+          dispatch(addToast({ type: "error", message: res.data.error }));
+        }
+        else{
+          Object.assign(res.data, {isAdmin: false});
+          console.log(res.data);
+          dispatch(setLoading(false));
+          dispatch(signIn(res.data));
+          resetForm();
+          navigate('/');
+          dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -77,7 +85,7 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component={Paper} maxWidth="xs" sx={{backgroundColor: 'white', py: 1, my: 10, borderRadius: 5}}>
         <CssBaseline />
         <Box
           sx={{

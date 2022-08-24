@@ -272,6 +272,24 @@ function Biodata() {
     );
   }
 
+  if(!isLoggedIn){
+    return(
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          You are not Logged In!
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -285,18 +303,10 @@ function Biodata() {
             alignItems: "center",
           }}
         >
-          {isLoggedIn ? (
-            <>
               <Typography variant="h3" gutterBottom>
                 Personal Biodata
               </Typography>
               {displayData}
-            </>
-          ) : (
-            <Typography variant="h3" gutterBottom>
-              Please Login to continue.
-            </Typography>
-          )}
         </Box>
       </Container>
     </ThemeProvider>

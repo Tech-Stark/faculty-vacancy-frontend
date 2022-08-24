@@ -40,7 +40,7 @@ const MySubscriptions = () => {
   if (isLoading) {
     return (
       <Grid container spacing={1} justifyContent="center" sx={{ marginTop: 5 }}>
-        <CircularProgress color="secondary" size={40} />
+        <CircularProgress color="primary" size={40} />
       </Grid>
     );
   } else {

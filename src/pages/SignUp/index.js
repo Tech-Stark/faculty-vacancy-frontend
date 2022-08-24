@@ -10,6 +10,7 @@ import * as Yup from "yup";
 
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
@@ -55,7 +56,7 @@ const MyTextInput = (props) => {
     return (
       <>
         <TextField {...field} {...props} 
-          margin="dense" 
+          margin="dense"
           size="small" 
           fullWidth
           helperText={meta.touched && meta.error ? meta.error : null}
@@ -116,7 +117,7 @@ const SignUp = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component={Paper} maxWidth="xs" sx={{backgroundColor: 'white', py: 1, my: 6, borderRadius: 5}}>
         <CssBaseline />
         <Box
           sx={{
