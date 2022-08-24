@@ -15,25 +15,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { signOut } from "../redux/features/auth/authSlice";
 import { addToast } from "../redux/features/toast/toastSlice";
+import { useNavigate } from "react-router-dom";
 
 const Teacherpages = [
   { Name: "Vacancies", pagePath: "vacancy" },
   { Name: "Subscriptions", pagePath: "subscriptions" },
   { Name: "Profile", pagePath: "profile" },
 ];
-//const Adminpages = ["Vacancies", "Add Teachers", "View Teachers"];
+const Adminpages = [
+  { Name: "Vacancies", pagePath: "vacancy" },
+  { Name: "Add Teachers", pagePath: "addteacher" },
+  { Name: "View Teachers", pagePath: "viewteachers" },
+];
 
 const TempNavbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     if (isLoggedIn) {
       dispatch(signOut());
       dispatch(addToast({ type: "info", message: "You are logged out!" }));
+      navigate("/login");
     }
   };
 
@@ -53,7 +60,7 @@ const TempNavbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{backgroundColor: '#263354'}}>
+    <AppBar position="static" sx={{ backgroundColor: "#263354" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -102,13 +109,29 @@ const TempNavbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {Teacherpages.map((page) => (
-                <MenuItem key={page.Name} onClick={handleCloseNavMenu}>
-                  <NavLink to={`/${page.pagePath}`}>
-                    <Typography textAlign="center">{page.Name}</Typography>
-                  </NavLink>
-                </MenuItem>
-              ))}
+              {isLoggedIn && (
+                <section>
+                  {!isAdmin
+                    ? Teacherpages.map((page, index) => (
+                        <MenuItem key={index} onClick={handleCloseNavMenu}>
+                          <NavLink to={`/${page.pagePath}`}>
+                            <Typography textAlign="center">
+                              {page.Name}
+                            </Typography>
+                          </NavLink>
+                        </MenuItem>
+                      ))
+                    : Adminpages.map((page, index) => (
+                        <MenuItem key={index} onClick={handleCloseNavMenu}>
+                          <NavLink to={`/${page.pagePath}`}>
+                            <Typography textAlign="center">
+                              {page.Name}
+                            </Typography>
+                          </NavLink>
+                        </MenuItem>
+                      ))}
+                </section>
+              )}
             </Menu>
           </Box>
           <Typography
@@ -130,16 +153,31 @@ const TempNavbar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {Teacherpages.map((page) => (
-              <NavLink to={`/${page.pagePath}`} key={page.Name}>
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page.Name}
-                </Button>
-              </NavLink>
-            ))}
+            {isLoggedIn && (
+              <>
+                {!isAdmin
+                  ? Teacherpages.map((page, index) => (
+                      <NavLink to={`/${page.pagePath}`} key={index}>
+                        <Button
+                          onClick={handleCloseNavMenu}
+                          sx={{ my: 2, color: "white", display: "block" }}
+                        >
+                          {page.Name}
+                        </Button>
+                      </NavLink>
+                    ))
+                  : Adminpages.map((page, index) => (
+                      <NavLink to={`/admin/${page.pagePath}`} key={index}>
+                        <Button
+                          onClick={handleCloseNavMenu}
+                          sx={{ my: 2, color: "white", display: "block" }}
+                        >
+                          {page.Name}
+                        </Button>
+                      </NavLink>
+                    ))}
+              </>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

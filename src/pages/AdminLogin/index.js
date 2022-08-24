@@ -55,20 +55,26 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { isLoading } = useSelector((state) => state.auth);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, resetForm) => {
     console.log(values);
     dispatch(setLoading(true));
     axios
       .post(`${BASE_URL}admin/login`, values, configToken())
       .then((res) => {
-        Object.assign(res.data, {isAdmin: true});
-        console.log(res.data);
-        dispatch(setLoading(false));
-        dispatch(signIn(res.data));
-        navigate("/");
-        dispatch(
-          addToast({ type: "success", message: "Successfully logged in!" })
-        );
+        if (res.data.error) {
+          dispatch(setLoading(false));
+          dispatch(addToast({ type: "error", message: res.data.error }));
+        } else {
+          Object.assign(res.data, { isAdmin: true });
+          console.log(res.data);
+          dispatch(setLoading(false));
+          dispatch(signIn(res.data));
+          resetForm();
+          navigate("/");
+          dispatch(
+            addToast({ type: "success", message: "Successfully logged in!" })
+          );
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -111,7 +117,9 @@ const AdminLogin = () => {
                   //.min(8, "Password is minimum 8 characters in length.")
                   .required("This field is required!"),
               })}
-              onSubmit={(values) => handleSubmit(values)}
+              onSubmit={(values, { resetForm }) =>
+                handleSubmit(values, resetForm)
+              }
             >
               <Form>
                 <Grid container spacing={1}>

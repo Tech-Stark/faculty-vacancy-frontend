@@ -26,7 +26,6 @@ import { useEffect } from "react";
 
 const theme = createTheme();
 
-
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -59,18 +58,18 @@ const MyCheckbox = ({ children, ...props }) => {
   );
 };
 
-// const MySelect = ({ label, ...props }) => {
-//   const [field, meta] = useField(props);
-//   return (
-//     <div>
-//       <label htmlFor={props.id || props.name}>{label}</label>
-//       <select {...field} {...props} />
-//       {meta.touched && meta.error ? (
-//         <div className="error">{meta.error}</div>
-//       ) : null}
-//     </div>
-//   );
-// };
+const MySelect = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <div>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <select {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
+    </div>
+  );
+};
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("This field is required!"),
@@ -94,21 +93,37 @@ const validationSchema = Yup.object({
 
 const AddTeacher = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [dept,setDept]=useState([]);
+  const [depts, setDepts] = useState([]);
+  const [collegeId, setCollegeId] = useState("");
+  const [collegeName, setCollegeName] = useState("");
 
   const dispatch = useDispatch();
-  const { isLoading, isLoggedIn,token } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, token } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       dispatch(setLoading(true));
-      axios.get(`${BASE_URL}admin/getmycollegedata`,configToken(token))
-      .then((response) =>{
-        console.log(response.data)
-      })
-      .catch((err)=>console.log(err.message))
+      axios
+        .get(`${BASE_URL}admin/getmycollegedata`, configToken(token))
+        .then((response) => {
+          // console.log(response.data);
+          setDepts(response.data.departments);
+          setCollegeName(response.data.collegeName);
+          setCollegeId(response.data.collegeId);
+          dispatch(setLoading(false));
+        })
+        .catch((err) => {
+          console.log(err.message);
+          dispatch(setLoading(false));
+        });
     }
-  },[isLoggedIn,token])
+  }, [isLoggedIn, token]);
+
+  const deptselectList = depts.map((dept, index) => (
+    <option key={index} value={dept.name}>
+      {dept.name}
+    </option>
+  ));
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
@@ -148,153 +163,179 @@ const AddTeacher = () => {
           <Typography component="h1" variant="h5">
             Add Teacher
           </Typography>
-
-          <Box sx={{ mt: 3 }}>
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-                dob: "",
-                firstName: "",
-                lastName: "",
-                department: "",
-                position: "",
-                collegeId: "",
-                dateJoined: "",
-                isOpenToWork: "",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={(values, { resetForm }) =>
-                handleSubmit(values, resetForm)
-              }
+          {depts.length == 0 ? (
+            <Grid
+              container
+              spacing={1}
+              justifyContent="center"
+              sx={{ marginTop: 5 }}
             >
-              <Form>
-                <Grid container spacing={1}>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      First Name
-                    </Typography>
-                    <MyTextInput
-                      label="First Name"
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Last Name
-                    </Typography>
-                    <MyTextInput
-                      label="Last Name"
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                    />
+              <CircularProgress color="secondary" size={40} />
+            </Grid>
+          ) : (
+            <Box sx={{ mt: 3 }}>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                  dob: "",
+                  firstName: "",
+                  lastName: "",
+                  department: "",
+                  position: "",
+                  collegeName: collegeName,
+                  collegeId: collegeId,
+                  dateJoined: "",
+                  isOpenToWork: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={(values, { resetForm }) =>
+                  handleSubmit(values, resetForm)
+                }
+              >
+                <Form>
+                  <Grid container spacing={1}>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        First Name
+                      </Typography>
+                      <MyTextInput
+                        label="First Name"
+                        id="firstName"
+                        name="firstName"
+                        type="text"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Last Name
+                      </Typography>
+                      <MyTextInput
+                        label="Last Name"
+                        id="lastName"
+                        name="lastName"
+                        type="text"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Email Address
+                      </Typography>
+                      <MyTextInput
+                        label="Email Address"
+                        id="email"
+                        name="email"
+                        type="email"
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Password
+                      </Typography>
+                      <MyTextInput
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff fontSize="small" />
+                                ) : (
+                                  <Visibility fontSize="small" />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Date of Birth
+                      </Typography>
+                      <MyTextInput id="dob" name="dob" type="date" />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        College Name
+                      </Typography>
+                      <MyTextInput
+                        id="collegeName"
+                        name="collegeName"
+                        type="text"
+                        disabled={true}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        College ID
+                      </Typography>
+                      <MyTextInput
+                        id="collegeId"
+                        name="collegeId"
+                        type="text"
+                        disabled={true}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Department
+                      </Typography>
+                      <MySelect name="department">
+                        <option value="">Select a Department</option>
+                        {deptselectList}
+                      </MySelect>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Position
+                      </Typography>
+                      <MyTextInput id="position" name="position" type="text" />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Date of Joining
+                      </Typography>
+                      <MyTextInput
+                        id="dateJoined"
+                        name="dateJoined"
+                        type="date"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <MyCheckbox name="isOpenToWork"></MyCheckbox>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Are you open to work?
+                      </Typography>
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Email Address
-                    </Typography>
-                    <MyTextInput
-                      label="Email Address"
-                      id="email"
-                      name="email"
-                      type="email"
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Password
-                    </Typography>
-                    <MyTextInput
-                      label="Password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={() => setShowPassword(!showPassword)}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff fontSize="small" />
-                              ) : (
-                                <Visibility fontSize="small" />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Date of Birth
-                    </Typography>
-                    <MyTextInput id="dob" name="dob" type="date" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      College ID
-                    </Typography>
-                    <MyTextInput id="collegeId" name="collegeId" type="text" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Department
-                    </Typography>
-                    <MyTextInput
-                      id="department"
-                      name="department"
-                      type="text"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Position
-                    </Typography>
-                    <MyTextInput id="position" name="position" type="text" />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Date of Joining
-                    </Typography>
-                    <MyTextInput
-                      id="dateJoined"
-                      name="dateJoined"
-                      type="date"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <MyCheckbox name="isOpenToWork"></MyCheckbox>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Are you open to work?
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  disabled={isLoading ? true : false}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  {isLoading ? (
-                    <CircularProgress color="primary" size={25} />
-                  ) : (
-                    "Add Teacher"
-                  )}
-                </Button>
-              </Form>
-            </Formik>
-          </Box>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={isLoading ? true : false}
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    {isLoading ? (
+                      <CircularProgress color="primary" size={25} />
+                    ) : (
+                      "Add Teacher"
+                    )}
+                  </Button>
+                </Form>
+              </Formik>
+            </Box>
+          )}
         </Box>
       </Container>
     </ThemeProvider>

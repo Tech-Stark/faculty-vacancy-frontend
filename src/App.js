@@ -1,18 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import "./App.css";
 import ToastList from "./components/ToastList";
 import TempNavbar from "./components/TempNavbar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./redux/features/auth/authSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(loadUser());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
