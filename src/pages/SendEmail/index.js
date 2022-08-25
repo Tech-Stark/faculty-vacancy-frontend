@@ -1,5 +1,5 @@
 import {useMemo, useState, useEffect} from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import {BASE_URL, configToken} from '../../utils/api';
@@ -9,10 +9,13 @@ import Typography from '@mui/material/Typography';
 import TableComponent from '../../components/Table';
 import { SelectColumnFilter } from '../../components/Table';
 import Button from '@mui/material/Button';
+import { addToast } from "../../redux/features/toast/toastSlice";
 
 const SendEmail = () => {
     const[teachersData, setTeachersData] = useState([]);
-    const[isLoading, setIsLoading] = useState(false);    
+    const[isLoading, setIsLoading] = useState(false); 
+    
+    const dispatch = useDispatch();
 
     const { isLoggedIn, token, isAdmin } = useSelector((state) => state.auth);
     const { jobId } = useParams();
@@ -33,6 +36,25 @@ const SendEmail = () => {
                 });
         }
     }, [isLoggedIn, token]);
+
+    const sendEmail = (profileId, isInProcess, setIsInProcess) =>{
+      const emailData = {
+        vacancyId : jobId,
+        profileIdList : [profileId]
+      }
+      setIsInProcess(true);
+      axios.post(`${BASE_URL}admin/mail/invite`, emailData, configToken(token))
+        .then(response =>{
+          console.log(response);
+          setIsInProcess(false);
+          dispatch(addToast({type: 'success', message: 'Successfully sent email!'}));
+        })
+        .catch(err => {
+          console.error(err);
+          setIsInProcess(false);
+          dispatch(addToast({type: 'error', message: 'Could not send email!'}));
+        });
+    }
 
     const columns = useMemo(
         () => [
@@ -94,8 +116,9 @@ const SendEmail = () => {
             Header: '',
             id: "button",
             Cell: (d) => {
+              const[isInProcess, setIsInProcess] = useState(false);
               return (
-                  <Button variant="contained" color="primary" size="small">
+                  <Button variant="contained" disabled={isInProcess} color="primary" size="small" onClick={()=> sendEmail(d.row.original.profileId, isInProcess, setIsInProcess)}>
                     Send Email
                   </Button>
               );

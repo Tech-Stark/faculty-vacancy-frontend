@@ -70,7 +70,12 @@ const AdminLogin = () => {
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
           resetForm();
-          navigate("/");
+          if(res.data.isSuperAdmin){
+            navigate('/superadmin/dashboard');
+          }
+          else{
+            navigate('/admin/dashboard');
+          }
           dispatch(
             addToast({ type: "success", message: "Successfully logged in!" })
           );

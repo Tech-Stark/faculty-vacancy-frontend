@@ -54,7 +54,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, isLoggedIn, isAdmin } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, isAdmin, isSuperAdmin } = useSelector((state) => state.auth);
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
@@ -71,7 +71,6 @@ const Login = () => {
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
           resetForm();
-          navigate('/vacancy');
           dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
         }
       })
@@ -88,6 +87,10 @@ const Login = () => {
 
   else if(isLoggedIn && isAdmin){
     return <Navigate to="/admin/vacancy" replace />;
+  }
+
+  else if(isLoggedIn && isSuperAdmin){
+    return <Navigate to="/superadmin/dashboard" replace />;
   }
 
   return (
