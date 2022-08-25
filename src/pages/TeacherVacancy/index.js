@@ -103,7 +103,7 @@ function TeacherVacancy() {
           <Tab label="All Vacancies" onClick={handleAllVacancyToggle} />
           <Tab label="Subscribed Vacancies" onClick={handleSubsVacancyToggle} />
         </Tabs>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center" sx={{my: 2}}>
           {vacancyToggle ? allVacanciesCardList : subsVacanciesCardList}
         </Grid>
       </Box>

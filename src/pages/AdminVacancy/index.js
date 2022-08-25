@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import { useSelector } from "react-redux";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,9 +14,29 @@ import Completed from "./Completed";
 export default function AdminVacancy() {
   const[value, setValue] = useState('one');
 
+  const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  if(!isLoggedIn || !isAdmin){
+    return(
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          You are not Authorized!
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Container component="main" maxWidth="lg">

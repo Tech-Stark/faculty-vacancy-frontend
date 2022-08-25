@@ -164,13 +164,13 @@ function Biodata() {
             firstName: userData.user.firstName,
             lastName: userData.user.lastName,
             email: userData.user.email,
-            dob: userData.user.dob.split("T")[0],
+            dob: userData.user.dob?.split("T")[0],
             isOpenToWork: userData.user.isOpenToWork,
             department: userData.user.department,
             position: userData.user.position,
             collegeName: userData.user.collegeName,
             collegeId: userData.user.collegeId,
-            dateJoined: userData.user.dateJoined.split("T")[0],
+            dateJoined: userData.user.dateJoined?.split("T")[0],
             phoneNumber: userData.user.phoneNumber,
           }}
           validationSchema={validationSchema}
