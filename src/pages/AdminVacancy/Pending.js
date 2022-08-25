@@ -3,10 +3,10 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import { BASE_URL, configToken } from "../../utils/api";
 import { addToast } from "../../redux/features/toast/toastSlice";
 import PendingVacancyCard from "../../components/PendingVacancyCard";
+import { Box, Typography } from "@mui/material";
 
 const Pending = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,15 +44,38 @@ const Pending = () => {
       </Grid>
     );
   } else {
-    return (
-      <Grid container spacing={1} justifyContent="center" sx={{ marginTop: 5 }}>
-        {pendingData.map((item, index) => (
-          <Grid key={index} item xs={12}>
-            <PendingVacancyCard item={item} />
-          </Grid>
-        ))}
-      </Grid>
-    );
+    if (pendingData.length === 0) {
+      return (
+        <Box
+          sx={{
+            marginTop: 4,
+            marginBottom: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            No upcoming vacancies!
+          </Typography>
+        </Box>
+      );
+    } else {
+      return (
+        <Grid
+          container
+          spacing={1}
+          justifyContent="center"
+          sx={{ marginTop: 5 }}
+        >
+          {pendingData.map((item, index) => (
+            <Grid key={index} item xs={12}>
+              <PendingVacancyCard item={item} />
+            </Grid>
+          ))}
+        </Grid>
+      );
+    }
   }
 };
 

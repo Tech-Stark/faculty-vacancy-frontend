@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
 
 import { BASE_URL, configToken } from "../../utils/api";
 import { addToast } from "../../redux/features/toast/toastSlice";
