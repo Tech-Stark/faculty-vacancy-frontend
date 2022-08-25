@@ -113,7 +113,7 @@ const TempNavbar = () => {
                       ))
                     : Adminpages.map((page, index) => (
                         <MenuItem key={index} onClick={handleCloseNavMenu}>
-                          <NavLink to={`/${page.pagePath}`}>
+                          <NavLink to={`/admin/${page.pagePath}`}>
                             <Typography textAlign="center">
                               {page.Name}
                             </Typography>
@@ -154,6 +154,7 @@ const TempNavbar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             {isLoggedIn ? (
+
                   <Button variant="outlined" sx={{color: "white"}} onClick={handleLogout}>
                     Logout
                   </Button>
@@ -163,7 +164,7 @@ const TempNavbar = () => {
                   </NavLink>
             )}
           </Box>
-        </Toolbar>     
+        </Toolbar>
       </Container>
     </AppBar>
   );

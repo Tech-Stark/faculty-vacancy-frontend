@@ -50,7 +50,7 @@ export default function VacancyCard({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button component={Link} href={`https://${applyLink}`} target="_blank" variant="contained" sx={{ backgroundColor: "#263354", color:"white" }}>
+        <Button component={Link} href={applyLink} target="_blank" variant="contained" sx={{ backgroundColor: "#263354", color:"white" }}>
           Apply
         </Button>
         <ExpandMore

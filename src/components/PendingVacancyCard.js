@@ -9,7 +9,13 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useFormik } from "formik";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, Grid, TextField } from "@mui/material";
+import { useState } from "react";
+import axios from "axios";
+
+import { useDispatch, useSelector } from "react-redux";
+import { BASE_URL, configToken } from "../utils/api";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -23,6 +29,9 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function PendingVacancyCard({ item }) {
+  const { token, isAdmin, isLoggedIn } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const handleSubmit = (values, item) => {
     const postObj = {
       position: item.position,
@@ -34,6 +43,20 @@ export default function PendingVacancyCard({ item }) {
       ...values,
     };
     console.log(postObj);
+    if (isLoggedIn && isAdmin) {
+      setIsLoading(true);
+      axios
+        .post(`${BASE_URL}admin/createvacancy`, postObj, configToken(token))
+        .then((res) => {
+          console.log(res);
+          setCompleted(true);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          setIsLoading(false);
+        });
+    }
   };
   const [expanded, setExpanded] = React.useState(false);
   const formik = useFormik({
@@ -41,6 +64,7 @@ export default function PendingVacancyCard({ item }) {
       minimumQualification: "",
       minimumExperience: "",
       compensation: "",
+      applyLink: "",
     },
     onSubmit: (values) => {
       handleSubmit(values, item);
@@ -104,10 +128,38 @@ export default function PendingVacancyCard({ item }) {
               onChange={formik.handleChange}
               value={formik.values.compensation}
             />
+            <TextField
+              size="small"
+              id="applyLink"
+              label="Apply Link"
+              variant="outlined"
+              sx={{ mr: 1, mb: 1 }}
+              onChange={formik.handleChange}
+              value={formik.values.applyLink}
+            />
 
-            <Button color="primary" variant="contained" type="submit">
-              Create Vacancy
-            </Button>
+            {completed ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <CheckCircleOutlineIcon sx={{ color: "green" }} />
+                <Typography variant="subtitle2" sx={{ color: "green" }}>
+                  Vacancy Created
+                </Typography>
+              </div>
+            ) : (
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                disabled={isLoading ? true : false}
+                sx={{ width: "100%" }}
+              >
+                {isLoading ? (
+                  <CircularProgress color="primary" size={25} />
+                ) : (
+                  "Create Vacancy"
+                )}
+              </Button>
+            )}
           </form>
         </CardContent>
       </Collapse>
