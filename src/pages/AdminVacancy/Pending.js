@@ -18,7 +18,7 @@ const Pending = () => {
     if (isLoggedIn && isAdmin) {
       setIsLoading(true);
       axios
-        .get(`${BASE_URL}admin/getpendingvacancies`, configToken(token))
+        .get(`${BASE_URL}admin/getvacancyfordays/1000`, configToken(token))
         .then((response) => {
           console.log(response.data);
           setPendingData(response.data);

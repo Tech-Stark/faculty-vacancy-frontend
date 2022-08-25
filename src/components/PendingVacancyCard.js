@@ -22,7 +22,19 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function PendingVacancyCard() {
+export default function PendingVacancyCard({ item }) {
+  const handleSubmit = (values, item) => {
+    const postObj = {
+      position: item.position,
+      department: item.department,
+      college: item.collegeName,
+      collegeId: item.collegeId,
+      email: item.email,
+      location: item.location,
+      ...values,
+    };
+    console.log(postObj);
+  };
   const [expanded, setExpanded] = React.useState(false);
   const formik = useFormik({
     initialValues: {
@@ -31,7 +43,7 @@ export default function PendingVacancyCard() {
       compensation: "",
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      handleSubmit(values, item);
     },
   });
 
@@ -41,16 +53,13 @@ export default function PendingVacancyCard() {
 
   return (
     <Card>
-      <CardHeader
-        title="Assistant Professor"
-        subheader="Electrical Engineering"
-      />
+      <CardHeader title={item.position} subheader={item.department} />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          College : National Institute of Technology Durgapur
+          College : {item.collegeName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Location : Durgapur, West Bengal
+          Location : {item.location}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -97,7 +106,7 @@ export default function PendingVacancyCard() {
             />
 
             <Button color="primary" variant="contained" type="submit">
-              Submit
+              Create Vacancy
             </Button>
           </form>
         </CardContent>
