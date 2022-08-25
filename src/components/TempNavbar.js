@@ -21,6 +21,7 @@ const Teacherpages = [
   { Name: "Profile", pagePath: "profile" },
 ];
 const Adminpages = [
+  { Name: "Dashboard", pagePath: "dashboard" },
   { Name: "Vacancies", pagePath: "vacancy" },
   { Name: "Add Teachers", pagePath: "addteacher" },
   { Name: "View Teachers", pagePath: "viewteachers" },
@@ -153,9 +154,9 @@ const TempNavbar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             {isLoggedIn ? (
-                  <Typography color="white" textAlign="center" onClick={handleLogout}>
+                  <Button variant="outlined" sx={{color: "white"}} onClick={handleLogout}>
                     Logout
-                  </Typography>
+                  </Button>
               ) : (
                   <NavLink to="/login">
                     <Typography color="white" textAlign="center">Login</Typography>

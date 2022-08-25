@@ -66,7 +66,6 @@ const AdminLogin = () => {
           dispatch(setLoading(false));
           dispatch(addToast({ type: "error", message: res.data.error }));
         } else {
-          res.data.isAdmin = true;
           console.log(res.data);
           dispatch(setLoading(false));
           dispatch(signIn(res.data));

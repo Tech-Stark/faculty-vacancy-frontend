@@ -67,13 +67,11 @@ const Login = () => {
           dispatch(addToast({ type: "error", message: res.data.error }));
         }
         else{
-          //Object.assign(res.data, {isAdmin: false});
-          res.data.isAdmin = false;
           console.log(res.data);
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
           resetForm();
-          navigate('/');
+          navigate('/vacancy');
           dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
         }
       })

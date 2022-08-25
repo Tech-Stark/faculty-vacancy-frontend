@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   useTable,
   useFilters,
@@ -17,7 +17,6 @@ import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -29,9 +28,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 
 import SearchIcon from '@mui/icons-material/Search';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import CircularProgress from '@mui/material/CircularProgress';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -39,7 +35,7 @@ import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrow
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { Typography } from '@mui/material';
 
-function GlobalFilter({
+export function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
@@ -57,8 +53,8 @@ function GlobalFilter({
             sx={{backgroundColor: 'white'}}
             value={value || ''}
             onChange={(e) => {
-            setValue(e.target.value);
-            onChange(e.target.value);
+              setValue(e.target.value);
+              onChange(e.target.value);
             }}
             placeholder="Search"
             endAdornment={
@@ -98,12 +94,12 @@ export function SelectColumnFilter({
             name={id}
             value={filterValue}
             onChange={(e) => {
-                setFilter(e.target.value || '');
-              }}
+              setFilter(e.target.value || '');
+            }}
         >
             <MenuItem value=''>All</MenuItem>
-                {options.map((option, i) => (
-                    <MenuItem key={i} value={option}>{option}</MenuItem>
+            {options.map((option, i) => (
+              <MenuItem key={i} value={option}>{option}</MenuItem>
             ))}
         </Select>
     </FormControl>
@@ -200,7 +196,7 @@ const TableComponent = ({
                 >
                   {row.cells.map((cell, index) => {
                     return (
-                      <TableCell key={index} {...cell.getCellProps()} className="px-4 text-sm text-left">
+                      <TableCell key={index} {...cell.getCellProps()}>
                         {cell.render('Cell')}
                       </TableCell>
                     );

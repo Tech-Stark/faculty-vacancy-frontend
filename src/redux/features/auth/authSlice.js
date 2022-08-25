@@ -5,7 +5,8 @@ const initialState = {
   isLoggedIn: false,
   isAdmin: JSON.parse(localStorage.getItem('isAdmin')),
   token: localStorage.getItem('token'),
-  userId: localStorage.getItem('userId')
+  userId: localStorage.getItem('userId'),
+  college: localStorage.getItem('college'),
 };
 
 const authSlice = createSlice({
@@ -20,12 +21,14 @@ const authSlice = createSlice({
       state.token = localStorage.getItem('token') || null;
       state.isLoggedIn = localStorage.getItem('token') ? true : false;
       state.userId = localStorage.getItem('userId') || null;
+      state.college = localStorage.getItem('college') || null;
     },
     signIn(state, action) {
       const { payload } = action;
-      const { token, id, isAdmin } = payload;
+      const { token, id, isAdmin, collegeName } = payload;
 
       state.token = token;
+      state.college = collegeName;
       state.isAdmin = isAdmin;
       state.isLoggedIn = true;
       state.userId = id;
@@ -33,12 +36,14 @@ const authSlice = createSlice({
       localStorage.setItem('token', token);
       localStorage.setItem('userId', id);
       localStorage.setItem('isAdmin', isAdmin);
+      localStorage.setItem('college', collegeName);
     },
     signOut(state) {
       state.isLoggedIn = false;
       state.token = null;
       state.isAdmin = false;
       state.userId = null;
+      state.college = null;
       localStorage.clear();
     },
   },

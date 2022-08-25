@@ -1,4 +1,5 @@
 import * as React from "react";
+import Link from '@mui/material/Link';
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -26,6 +27,10 @@ export default function VacancyCard({
   department,
   position,
   location,
+  minimumQualification,
+  compensation,
+  numVacancies,
+  applyLink
 }) {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -43,12 +48,9 @@ export default function VacancyCard({
         <Typography variant="body2" color="text.secondary">
           Location : {location}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Number of Vacancy : 2
-        </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button variant="contained" color="success">
+        <Button component={Link} href={`https://${applyLink}`} target="_blank" variant="contained" sx={{ backgroundColor: "#263354", color:"white" }}>
           Apply
         </Button>
         <ExpandMore
@@ -62,9 +64,9 @@ export default function VacancyCard({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography>Minimum Qualification : B.Tech</Typography>
+          <Typography>Minimum Qualification : {minimumQualification}</Typography>
           <Typography>Minimum Experience : 0 years</Typography>
-          <Typography>Compensation : 12 Lakhs per Annum</Typography>
+          <Typography>Compensation : {compensation}</Typography>
         </CardContent>
       </Collapse>
     </Card>
