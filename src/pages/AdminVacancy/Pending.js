@@ -6,19 +6,23 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { BASE_URL, configToken } from "../../utils/api";
 import { addToast } from "../../redux/features/toast/toastSlice";
 import PendingVacancyCard from "../../components/PendingVacancyCard";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, TextField } from "@mui/material";
 
 const Pending = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [pendingData, setPendingData] = useState([]);
+  const [dateLimit, setDateLimit] = useState(30);
   const dispatch = useDispatch();
   const { token, isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn && isAdmin) {
+    if (isLoggedIn && isAdmin && dateLimit !== "") {
       setIsLoading(true);
       axios
-        .get(`${BASE_URL}admin/getvacancyfordays/1000`, configToken(token))
+        .get(
+          `${BASE_URL}admin/getvacancyfordays/${dateLimit}`,
+          configToken(token)
+        )
         .then((response) => {
           console.log(response.data);
           setPendingData(response.data);
@@ -35,13 +39,39 @@ const Pending = () => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, token, isAdmin]);
+  }, [isLoggedIn, token, isAdmin, dateLimit]);
 
   if (isLoading) {
     return (
-      <Grid container spacing={1} justifyContent="center" sx={{ marginTop: 5 }}>
-        <CircularProgress color="primary" size={40} />
-      </Grid>
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <TextField
+          id="outlined-basic"
+          label="Enter date limit:"
+          variant="outlined"
+          type="number"
+          min={1}
+          value={dateLimit}
+          onChange={(e) => setDateLimit(e.target.value)}
+          sx={{ mb: 4 }}
+        />
+
+        <Grid
+          container
+          spacing={1}
+          justifyContent="center"
+          sx={{ marginTop: 5 }}
+        >
+          <CircularProgress color="primary" size={40} />
+        </Grid>
+      </Box>
     );
   } else {
     if (pendingData.length === 0) {
@@ -55,6 +85,15 @@ const Pending = () => {
             alignItems: "center",
           }}
         >
+          <TextField
+            id="outlined-basic"
+            label="Enter date limit:"
+            variant="outlined"
+            type="number"
+            value={dateLimit}
+            onChange={(e) => setDateLimit(e.target.value)}
+            sx={{ mb: 4 }}
+          />
           <Typography variant="h4" gutterBottom>
             No upcoming vacancies!
           </Typography>
@@ -62,18 +101,38 @@ const Pending = () => {
       );
     } else {
       return (
-        <Grid
-          container
-          spacing={1}
-          justifyContent="center"
-          sx={{ marginTop: 5 }}
+        <Box
+          sx={{
+            marginTop: 4,
+            marginBottom: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          {pendingData.map((item, index) => (
-            <Grid key={index} item xs={12}>
-              <PendingVacancyCard item={item} />
-            </Grid>
-          ))}
-        </Grid>
+          <TextField
+            id="outlined-basic"
+            label="Enter date limit:"
+            variant="outlined"
+            type="number"
+            min={1}
+            value={dateLimit}
+            onChange={(e) => setDateLimit(e.target.value)}
+            sx={{ mb: 4 }}
+          />
+          <Grid
+            container
+            spacing={1}
+            justifyContent="center"
+            sx={{ marginTop: 5 }}
+          >
+            {pendingData.map((item, index) => (
+              <Grid key={index} item xs={12}>
+                <PendingVacancyCard item={item} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       );
     }
   }

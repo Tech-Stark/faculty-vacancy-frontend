@@ -79,9 +79,14 @@ export default function PendingVacancyCard({ item }) {
     <Card>
       <CardHeader title={item.position} subheader={item.department} />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          College : {item.collegeName}
-        </Typography>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="body2" color="text.secondary">
+            College : {item.collegeName}
+          </Typography>
+          <Typography variant="subtitle1" color="maroon">
+            Days to Retire : {item.daysToRetire}
+          </Typography>
+        </div>
         <Typography variant="body2" color="text.secondary">
           Location : {item.location}
         </Typography>
@@ -151,7 +156,6 @@ export default function PendingVacancyCard({ item }) {
                 variant="contained"
                 type="submit"
                 disabled={isLoading ? true : false}
-                sx={{ width: "100%" }}
               >
                 {isLoading ? (
                   <CircularProgress color="primary" size={25} />

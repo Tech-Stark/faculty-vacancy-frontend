@@ -96,27 +96,37 @@ export default function OngoingVacancyCard({ item }) {
         <CircularProgress color="primary" size={25} />
       ) : (
         <CardActions disableSpacing>
-          <IconButton
-            aria-label="remove"
+          <Button
             onClick={handleRemove}
             disabled={isCompleted || isRemoved}
+            color="error"
+            variant="contained"
+            sx={{ ml: 1, mr: 1 }}
           >
-            <CancelIcon color={isCompleted || isRemoved ? "dark" : "error"} />
-          </IconButton>
-          <IconButton
+            Remove
+          </Button>
+          <Button
             disabled={isCompleted || isRemoved}
-            aria-label="completed"
             onClick={handleCompleted}
+            color="success"
+            variant="contained"
+            sx={{ ml: 1, mr: 1 }}
           >
-            <CheckCircleIcon
-              color={isCompleted || isRemoved ? "dark" : "success"}
-            />
-          </IconButton>
-          <IconButton aria-label="email" disabled={isCompleted || isRemoved}>
-            <Link to={`/admin/sendmail/${item.vacancyId}`}>
-              <SendIcon color={isCompleted || isRemoved ? "dark" : "primary"} />
-            </Link>
-          </IconButton>
+            Completed
+          </Button>
+          <Link
+            to={`/admin/sendmail/${item.vacancyId}`}
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={isCompleted || isRemoved}
+              sx={{ ml: 1, mr: 1 }}
+            >
+              Send Invite
+            </Button>
+          </Link>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}

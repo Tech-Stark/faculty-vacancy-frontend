@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -12,7 +12,7 @@ import Pending from "./Pending";
 import Completed from "./Completed";
 
 export default function AdminVacancy() {
-  const[value, setValue] = useState('one');
+  const [value, setValue] = useState("one");
 
   const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
@@ -20,8 +20,8 @@ export default function AdminVacancy() {
     setValue(newValue);
   };
 
-  if(!isLoggedIn || !isAdmin){
-    return(
+  if (!isLoggedIn || !isAdmin) {
+    return (
       <Box
         sx={{
           marginTop: 4,
@@ -40,33 +40,36 @@ export default function AdminVacancy() {
 
   return (
     <Container component="main" maxWidth="lg">
-        <CssBaseline />
-        <Box
+      <CssBaseline />
+      <Box
         sx={{
-            marginTop: 4,
-            marginBottom: 4,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
-        >
-            <Typography variant="h3" gutterBottom>
-                Vacancies
-            </Typography>
+      >
+        <Typography variant="h3" gutterBottom>
+          Vacancies
+        </Typography>
 
-            <Grid container spacing={2} justifyContent="center">
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                >
-                    <Tab value="one" label="Pending" />
-                    <Tab value="two" label="Ongoing" />
-                    <Tab value="three" label="Completed" />
-                </Tabs>
-            </Grid>
+        <Grid container spacing={2} justifyContent="center">
+          <Tabs value={value} onChange={handleChange}>
+            <Tab value="one" label="Pending" />
+            <Tab value="two" label="Ongoing" />
+            <Tab value="three" label="Completed" />
+          </Tabs>
+        </Grid>
 
-            {value === 'one' ? <Pending /> : value === 'two' ? <Ongoing /> : <Completed />}
-        </Box>
+        {value === "one" ? (
+          <Pending />
+        ) : value === "two" ? (
+          <Ongoing />
+        ) : (
+          <Completed />
+        )}
+      </Box>
     </Container>
   );
 }
