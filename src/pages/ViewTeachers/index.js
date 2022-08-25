@@ -4,6 +4,7 @@ import axios from 'axios';
 import {BASE_URL, configToken} from '../../utils/api';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import TableComponent from '../../components/Table';
 import { SelectColumnFilter } from '../../components/Table';
 import DetailDialog from '../Subscriptions/DetailDialog';
@@ -15,10 +16,10 @@ const ViewTeachers = () => {
     const[isLoading, setIsLoading] = useState(false);    
     const [open, setOpen] = useState(false);
 
-    const { isLoggedIn, token } = useSelector((state) => state.auth);
+    const { isLoggedIn, token, isAdmin } = useSelector((state) => state.auth);
 
     useEffect(() =>{
-        if(isLoggedIn){
+        if(isLoggedIn && isAdmin){
           setIsLoading(true);
             axios
                 .get(`${BASE_URL}admin/getallteachers`, configToken(token))
@@ -32,7 +33,7 @@ const ViewTeachers = () => {
                   setTeachersData([]);
                 });
         }
-    }, [isLoggedIn, token]);
+    }, [isLoggedIn, token, isAdmin]);
 
     const handleClickOpen = (data) => {
       setModalData(data);
@@ -127,6 +128,25 @@ const ViewTeachers = () => {
     []);
         
   const initialState = {hiddenColumns: ['firstName', 'lastName', 'isOpenToWork'], pageSize: 5 };
+
+  if(!isLoggedIn || !isAdmin){
+    return(
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          You are not Authorized!
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Container component="main" maxWidth="lg">
         <DetailDialog open={open} setOpen={setOpen} modalContent={modalContent} title="Details" />

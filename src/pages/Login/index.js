@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, signIn } from "../../redux/features/auth/authSlice";
@@ -54,7 +54,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
@@ -67,7 +67,8 @@ const Login = () => {
           dispatch(addToast({ type: "error", message: res.data.error }));
         }
         else{
-          Object.assign(res.data, {isAdmin: false});
+          //Object.assign(res.data, {isAdmin: false});
+          res.data.isAdmin = false;
           console.log(res.data);
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
@@ -82,6 +83,14 @@ const Login = () => {
         dispatch(addToast({ type: "error", message: err.error }));
       });
   };
+
+  if(isLoggedIn && !isAdmin){
+    return <Navigate to="/vacancy" replace />;
+  }
+
+  else if(isLoggedIn && isAdmin){
+    return <Navigate to="/admin/vacancy" replace />;
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -164,13 +173,13 @@ const Login = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container>
+                {/* <Grid container>
                   <Grid item xs>
                     <Link to="/login" style={{ textDecoration: "none" }}>
                       Forgot password?
                     </Link>
                   </Grid>
-                </Grid>
+                </Grid> */}
 
                 <Button
                   type="submit"

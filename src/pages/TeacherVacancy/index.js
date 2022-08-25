@@ -1,6 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect  } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../utils/api";
 import VacancyCard from "../../components/VacancyCard";

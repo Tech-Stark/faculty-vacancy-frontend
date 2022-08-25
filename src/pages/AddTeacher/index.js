@@ -98,10 +98,10 @@ const AddTeacher = () => {
   const [collegeName, setCollegeName] = useState("");
 
   const dispatch = useDispatch();
-  const { isLoading, isLoggedIn, token } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, token, isAdmin } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && isAdmin) {
       dispatch(setLoading(true));
       axios
         .get(`${BASE_URL}admin/getmycollegedata`, configToken(token))
@@ -117,7 +117,8 @@ const AddTeacher = () => {
           dispatch(setLoading(false));
         });
     }
-  }, [isLoggedIn, token]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn, token, isAdmin]);
 
   const deptselectList = depts.map((dept, index) => (
     <option key={index} value={dept.name}>
@@ -147,6 +148,24 @@ const AddTeacher = () => {
       });
   };
 
+  if(!isLoggedIn || !isAdmin){
+    return(
+      <Box
+        sx={{
+          marginTop: 4,
+          marginBottom: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          You are not Authorized!
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -163,7 +182,7 @@ const AddTeacher = () => {
           <Typography component="h1" variant="h5">
             Add Teacher
           </Typography>
-          {depts.length == 0 ? (
+          {depts.length === 0 ? (
             <Grid
               container
               spacing={1}

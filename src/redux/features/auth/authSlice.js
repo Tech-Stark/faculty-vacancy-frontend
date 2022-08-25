@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   isLoggedIn: false,
-  isAdmin: localStorage.getItem('isAdmin'),
+  isAdmin: JSON.parse(localStorage.getItem('isAdmin')),
   token: localStorage.getItem('token'),
   userId: localStorage.getItem('userId')
 };
@@ -16,7 +16,7 @@ const authSlice = createSlice({
       state.isLoading = action.payload;
     },
     loadUser(state) {
-      state.isAdmin = localStorage.getItem('isAdmin') || false;
+      state.isAdmin = JSON.parse(localStorage.getItem('isAdmin')) || false;
       state.token = localStorage.getItem('token') || null;
       state.isLoggedIn = localStorage.getItem('token') ? true : false;
       state.userId = localStorage.getItem('userId') || null;

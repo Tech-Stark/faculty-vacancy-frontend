@@ -1,37 +1,17 @@
-import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { signOut } from "../../redux/features/auth/authSlice";
-import { addToast } from "../../redux/features/toast/toastSlice";
-
-import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
-  const handleClick = () => {
-    if (isLoggedIn) {
-      dispatch(signOut());
-      dispatch(addToast({ type: "info", message: "You are logged out!" }));
-    }
-  };
+  if(isLoggedIn && !isAdmin){
+    return <Navigate to="/vacancy" replace />;
+  }
 
-  return (
-    <div className="Home">
-      <h1>Team Tech Stark</h1>
-      <h3>Smart India Hackathon 2022</h3>
-      <h6>Login Status : {isLoggedIn ? "Logged in" : "Not logged in"} </h6>
-      {isLoggedIn ? (
-        <Button variant="contained" onClick={handleClick}>
-          Logout
-        </Button>
-      ) : (
-        <Link to="/login">Login</Link>
-      )}
-      <Link to="/profile">Profile</Link>
-      <Link to="/vacancy">Vacancy</Link>
-    </div>
-  );
+  else if(isLoggedIn && isAdmin){
+    return <Navigate to="/admin/vacancy" replace />;
+  }
+  return <Navigate to="/login" replace />;
 };
 
 export default Home;

@@ -27,14 +27,14 @@ root.render(
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="vacancy" element={<TeacherVacancy />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="profile" element={<Biodata />} />
-            <Route path="admin/login" element={<AdminLogin />} />
+            <Route path="vacancy" element={<TeacherVacancy />} />
             <Route path="subscriptions" element={<Subscriptions />} />
+            <Route path="admin/login" element={<AdminLogin />} />            
+            <Route path="admin/dashboard" element={<Dashboard />} />
             <Route path="admin/addteacher" element={<AddTeacher />} />
             <Route path="admin/viewteachers" element={<ViewTeachers />} />
-            <Route path="admin/dashboard" element={<Dashboard />} />
             <Route path="admin/sendmail/:jobId" element={<SendEmail />} />
             <Route path="admin/vacancy" element={<AdminVacancy />} />
           </Route>

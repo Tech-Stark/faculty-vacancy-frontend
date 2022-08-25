@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../redux/features/auth/authSlice";
@@ -72,7 +72,7 @@ const SignUp = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, isAdmin, isLoggedIn } = useSelector((state) => state.auth);
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required("This field is required!"),
@@ -125,6 +125,14 @@ const SignUp = () => {
         );
       });
   };
+
+  if(isLoggedIn && !isAdmin){
+    return <Navigate to="/vacancy" replace />;
+  }
+
+  else if(isLoggedIn && isAdmin){
+    return <Navigate to="/admin/vacancy" replace />;
+  }
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, signIn } from "../../redux/features/auth/authSlice";
@@ -10,6 +10,7 @@ import * as Yup from "yup";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
@@ -53,7 +54,7 @@ const AdminLogin = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, isAdmin} = useSelector((state) => state.auth);
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
@@ -65,7 +66,7 @@ const AdminLogin = () => {
           dispatch(setLoading(false));
           dispatch(addToast({ type: "error", message: res.data.error }));
         } else {
-          Object.assign(res.data, { isAdmin: true });
+          res.data.isAdmin = true;
           console.log(res.data);
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
@@ -83,9 +84,13 @@ const AdminLogin = () => {
       });
   };
 
+  if(isLoggedIn && isAdmin){
+    return <Navigate to="/admin/vacancy" replace />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component={Paper} maxWidth="xs" sx={{backgroundColor: 'white', py: 1, my: 10, borderRadius: 5}}>
         <CssBaseline />
         <Box
           sx={{
@@ -166,13 +171,13 @@ const AdminLogin = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container>
+                {/* <Grid container>
                   <Grid item xs>
                     <Link to="/login" style={{ textDecoration: "none" }}>
                       Forgot password?
                     </Link>
                   </Grid>
-                </Grid>
+                </Grid> */}
 
                 <Button
                   type="submit"
