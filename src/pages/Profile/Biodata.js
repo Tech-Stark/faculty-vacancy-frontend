@@ -19,6 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import { Paper } from "@mui/material";
 
 const theme = createTheme();
 
@@ -272,8 +273,8 @@ function Biodata() {
     );
   }
 
-  if(!isLoggedIn){
-    return(
+  if (!isLoggedIn) {
+    return (
       <Box
         sx={{
           marginTop: 4,
@@ -292,7 +293,11 @@ function Biodata() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component={Paper}
+        maxWidth="xs"
+        sx={{ backgroundColor: "white", py: 1, my: 10, borderRadius: 5 }}
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -303,10 +308,10 @@ function Biodata() {
             alignItems: "center",
           }}
         >
-              <Typography variant="h3" gutterBottom>
-                Personal Biodata
-              </Typography>
-              {displayData}
+          <Typography variant="h3" gutterBottom>
+            Personal Biodata
+          </Typography>
+          {displayData}
         </Box>
       </Container>
     </ThemeProvider>

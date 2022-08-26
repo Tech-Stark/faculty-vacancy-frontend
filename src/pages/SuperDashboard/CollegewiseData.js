@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL, configToken } from "../../utils/api";
@@ -6,46 +8,39 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Tab, Tabs } from "@mui/material";
-import LocationwiseData from "./LocationwiseData";
-import CollegewiseData from "./CollegewiseData";
 
-const SuperDashboard = () => {
-  const [data, setData] = useState({});
+function CollegewiseData() {
   const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState([]);
   const [numDays, setNumDays] = useState(1000);
-  const [value, setValue] = useState("one");
 
   const { isLoggedIn, token, isSuperAdmin } = useSelector(
     (state) => state.auth
   );
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   useEffect(() => {
     if (isLoggedIn) {
       setIsLoading(true);
       axios
         .get(
-          `${BASE_URL}superadmin/getsuperadmindashboard/locations/${numDays}`,
+          `${BASE_URL}superadmin/getsuperadmindashboard/colleges/${numDays}`,
           configToken(token)
         )
         .then((response) => {
-          console.log(response.data);
+          //   console.log(response.data);
           setData(response.data);
           setIsLoading(false);
         })
         .catch((err) => {
+          console.log(err.message);
           setIsLoading(false);
           setData([]);
         });
     }
   }, [isLoggedIn, token, isSuperAdmin, numDays]);
+
+  console.log(data);
 
   if (isLoading) {
     return (
@@ -54,7 +49,6 @@ const SuperDashboard = () => {
       </Grid>
     );
   }
-
   if (!isLoggedIn) {
     return (
       <Box
@@ -72,7 +66,6 @@ const SuperDashboard = () => {
       </Box>
     );
   }
-
   if (data.length > 0) {
     return (
       <Container component="main" maxWidth="lg">
@@ -85,13 +78,14 @@ const SuperDashboard = () => {
             alignItems: "center",
           }}
         >
-          <Grid container spacing={2} justifyContent="center">
-            <Tabs value={value} onChange={handleChange}>
-              <Tab value="one" label="Location" />
-              <Tab value="two" label="College" />
-            </Tabs>
-          </Grid>
-          {value === "one" ? <LocationwiseData /> : <CollegewiseData />}
+          <h1>College Wise Data</h1>
+          {/* {data.map((item, index) => (
+            <div key={index}>
+              <h1>{item.location}</h1>
+              <h3>Current Vacancies : {item.vacancies[0].currentVacCount}</h3>
+              <h3>Pending Vacancies : {item.vacancies[0].pendingVacCount}</h3>
+            </div>
+          ))} */}
           {/* <Grid container spacing={2} justifyContent="center" sx={{ my: 2 }}>
             {data.map((item, index) => (
               <Grid
@@ -165,6 +159,6 @@ const SuperDashboard = () => {
       </Container>
     );
   }
-};
+}
 
-export default SuperDashboard;
+export default CollegewiseData;

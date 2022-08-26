@@ -73,26 +73,17 @@ const MySelect = ({ label, ...props }) => {
 };
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().required("This field is required!"),
-  lastName: Yup.string().required("This field is required!"),
-  email: Yup.string()
-    .email("Invalid email address!")
-    .required("This field is required!"),
-  password: Yup.string()
-    .min(8, "Password is minimum 8 characters in length.")
-    .required("This field is required!"),
-  dob: Yup.date("Select a valid Date!")
-    .max(new Date(), "DOB can not be in future!")
-    .required("This field is required!"),
+  location: Yup.string().required("This field is required!"),
+  minimumQualification: Yup.string().required("This field is required!"),
+  minimumExperience: Yup.string().required("This field is required!"),
   department: Yup.string().required("This field is required!"),
   position: Yup.string().required("This field is required!"),
-  dateJoined: Yup.date("Select a valid Date!")
-    .max(new Date(), "DOB can not be in future!")
-    .required("This field is required!"),
+  compensation: Yup.string().required("This field is required!"),
+  college: Yup.string().required("This field is required!"),
   collegeId: Yup.string().required("This field is required!"),
 });
 
-const AddTeacher = () => {
+const AddVacancy = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [depts, setDepts] = useState([]);
   const [collegeId, setCollegeId] = useState("");
@@ -133,20 +124,23 @@ const AddTeacher = () => {
     console.log(values);
     dispatch(setLoading(true));
     axios
-      .post(`${BASE_URL}admin/createteacher`, values, configToken(token))
+      .post(`${BASE_URL}admin/createvacancy`, values, configToken(token))
       .then((res) => {
         console.log(res.data);
         dispatch(setLoading(false));
         resetForm();
         dispatch(
-          addToast({ type: "success", message: "Successfully added teacher!" })
+          addToast({
+            type: "success",
+            message: "Successfully created vacancy!",
+          })
         );
       })
       .catch((err) => {
         console.log(err);
         dispatch(setLoading(false));
         dispatch(
-          addToast({ type: "error", message: "Could not add teacher." })
+          addToast({ type: "error", message: "Could not add vacancy." })
         );
       });
   };
@@ -187,7 +181,7 @@ const AddTeacher = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Add Teacher
+            Add Vacancy
           </Typography>
           {depts.length === 0 ? (
             <Grid
@@ -203,16 +197,14 @@ const AddTeacher = () => {
               <Formik
                 initialValues={{
                   email: "",
-                  password: "",
-                  dob: "",
-                  firstName: "",
-                  lastName: "",
+                  minimumExperience: "",
+                  minimumQualification: "",
+                  location: "",
                   department: "",
                   position: "",
-                  collegeName: collegeName,
+                  college: collegeName,
                   collegeId: collegeId,
-                  dateJoined: "",
-                  isOpenToWork: "",
+                  compensation: "",
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { resetForm }) =>
@@ -221,25 +213,25 @@ const AddTeacher = () => {
               >
                 <Form>
                   <Grid container spacing={1}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                       <Typography variant="subtitle1" gutterBottom>
-                        First Name
+                        Position
                       </Typography>
                       <MyTextInput
-                        label="First Name"
-                        id="firstName"
-                        name="firstName"
+                        label="Position"
+                        id="position"
+                        name="position"
                         type="text"
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                       <Typography variant="subtitle1" gutterBottom>
-                        Last Name
+                        Location
                       </Typography>
                       <MyTextInput
-                        label="Last Name"
-                        id="lastName"
-                        name="lastName"
+                        label="Location"
+                        id="location"
+                        name="location"
                         type="text"
                       />
                     </Grid>
@@ -255,48 +247,13 @@ const AddTeacher = () => {
                         type="email"
                       />
                     </Grid>
-
-                    <Grid item xs={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Password
-                      </Typography>
-                      <MyTextInput
-                        label="Password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => setShowPassword(!showPassword)}
-                                edge="end"
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff fontSize="small" />
-                                ) : (
-                                  <Visibility fontSize="small" />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Date of Birth
-                      </Typography>
-                      <MyTextInput id="dob" name="dob" type="date" />
-                    </Grid>
                     <Grid item xs={12}>
                       <Typography variant="subtitle1" gutterBottom>
                         College Name
                       </Typography>
                       <MyTextInput
-                        id="collegeName"
-                        name="collegeName"
+                        id="college"
+                        name="college"
                         type="text"
                         disabled={true}
                       />
@@ -314,7 +271,7 @@ const AddTeacher = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <Typography variant="subtitle1" gutterBottom>
-                        Department
+                        Location
                       </Typography>
                       <MySelect name="department">
                         <option value="">Select a Department</option>
@@ -323,25 +280,33 @@ const AddTeacher = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <Typography variant="subtitle1" gutterBottom>
-                        Position
-                      </Typography>
-                      <MyTextInput id="position" name="position" type="text" />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="subtitle1" gutterBottom>
-                        Date of Joining
+                        Minimum Qualification
                       </Typography>
                       <MyTextInput
-                        id="dateJoined"
-                        name="dateJoined"
-                        type="date"
+                        id="minimumQualification"
+                        name="minimumQualification"
+                        type="text"
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <MyCheckbox name="isOpenToWork"></MyCheckbox>
                       <Typography variant="subtitle1" gutterBottom>
-                        Are you open to work?
+                        Minimum Experience
                       </Typography>
+                      <MyTextInput
+                        id="minimumExperience"
+                        name="minimumExperience"
+                        type="text"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1" gutterBottom>
+                        Compensation
+                      </Typography>
+                      <MyTextInput
+                        id="compensation"
+                        name="compensation"
+                        type="text"
+                      />
                     </Grid>
                   </Grid>
 
@@ -355,7 +320,7 @@ const AddTeacher = () => {
                     {isLoading ? (
                       <CircularProgress color="primary" size={25} />
                     ) : (
-                      "Add Teacher"
+                      "Add Vacancy"
                     )}
                   </Button>
                 </Form>
@@ -368,4 +333,4 @@ const AddTeacher = () => {
   );
 };
 
-export default AddTeacher;
+export default AddVacancy;

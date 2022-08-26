@@ -18,6 +18,7 @@ import Dashboard from "./pages/AdminDashboard";
 import AdminVacancy from "./pages/AdminVacancy";
 import SendEmail from "./pages/SendEmail";
 import SuperDashboard from "./pages/SuperDashboard";
+import AddVacancy from "./pages/AddVacancy";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -32,13 +33,14 @@ root.render(
             <Route path="profile" element={<Biodata />} />
             <Route path="vacancy" element={<TeacherVacancy />} />
             <Route path="subscriptions" element={<Subscriptions />} />
-            <Route path="admin/login" element={<AdminLogin />} />            
+            <Route path="admin/login" element={<AdminLogin />} />
             <Route path="admin/dashboard" element={<Dashboard />} />
             <Route path="admin/addteacher" element={<AddTeacher />} />
             <Route path="admin/viewteachers" element={<ViewTeachers />} />
             <Route path="admin/sendmail/:jobId" element={<SendEmail />} />
             <Route path="admin/vacancy" element={<AdminVacancy />} />
             <Route path="superadmin/dashboard" element={<SuperDashboard />} />
+            <Route path="admin/createvacancy" element={<AddVacancy />} />
           </Route>
         </Routes>
       </BrowserRouter>
