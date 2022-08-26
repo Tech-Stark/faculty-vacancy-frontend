@@ -56,7 +56,7 @@ export default function AdminVacancy() {
 
         <Grid container spacing={2} justifyContent="center">
           <Tabs value={value} onChange={handleChange}>
-            <Tab value="one" label="Pending" />
+            <Tab value="one" label="Upcoming" />
             <Tab value="two" label="Ongoing" />
             <Tab value="three" label="Completed" />
           </Tabs>

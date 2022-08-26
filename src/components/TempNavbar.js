@@ -68,7 +68,7 @@ const TempNavbar = () => {
               textDecoration: "none",
             }}
           >
-            SIH2022
+            RECRUITEASY
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
