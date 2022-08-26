@@ -88,7 +88,7 @@ const CardTable = ({
                     >
                         {row.cells.map((cell, index) => 
                             cell.column.customWidth ?
-                            (<Grid item xs={12} md={8} key={index} sx={{mb: 4}} {...cell.getCellProps()}>
+                            (<Grid item xs={12} md={10} key={index} sx={{mb: 4}} {...cell.getCellProps()}>
                                 {cell.render('Cell')}
                             </Grid>) : null
                         )}

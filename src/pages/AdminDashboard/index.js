@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {BASE_URL, configToken} from '../../utils/api';
 import Box from '@mui/material/Box';
@@ -8,10 +9,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 const Dashboard = () => {
     const[data, setData] = useState({});
-    const[isLoading, setIsLoading] = useState(false);    
+    const[isLoading, setIsLoading] = useState(false);  
+    const navigate = useNavigate();  
 
     const { isLoggedIn, token, isAdmin, college } = useSelector((state) => state.auth);
 
@@ -31,6 +34,10 @@ const Dashboard = () => {
             });
         }
     }, [isLoggedIn, token, isAdmin]);
+
+    const handleViewMore = (department) => {
+      navigate('/admin/vacancy', { state: { dept: department, tab: 'two' } });
+    }
 
     if(isLoading){
       return (
@@ -78,17 +85,22 @@ const Dashboard = () => {
                   <Grid key={index} item component={Paper} xs={12} md={8} sx={{mb: 4}}>
                     <Typography variant="h6" gutterBottom>{item.name}</Typography>
                     <Grid container spacing={2} justifyContent="center" sx={{mt: 1}}>
-                      <Grid item xs={12} md={4}>
+                      <Grid item xs={12} md={3}>
                         <Typography variant="body1" gutterBottom>Capacity</Typography>
                         <Typography variant="h4" gutterBottom>{item.capacity}</Typography>
                       </Grid>
-                      <Grid item xs={12} md={4}>
+                      <Grid item xs={12} md={3}>
                         <Typography variant="body1" gutterBottom>Teacher Count</Typography>
                         <Typography variant="h4" gutterBottom>{item.teacherCount}</Typography>
                       </Grid>
-                      <Grid item xs={12} md={4}>
+                      <Grid item xs={12} md={3}>
                         <Typography variant="body1" gutterBottom>Vacancy</Typography>
                         <Typography variant="h4" gutterBottom>{item.vacancyCount}</Typography>
+                      </Grid>
+                      <Grid item xs={12} md={3} sx={{mt: 3}}>
+                          <Button variant="contained" color="primary" size="small" onClick={()=> handleViewMore(item.name)}>
+                            View More
+                          </Button>
                       </Grid>
                     </Grid>
                   </Grid>

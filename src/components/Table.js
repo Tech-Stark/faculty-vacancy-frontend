@@ -88,7 +88,7 @@ export function GlobalFilter({
 }
 
 export function SelectColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id, Header },
+  column: { filterValue, setFilter, preFilteredRows, id, Header, dept },
 }) {
   const options = useMemo(() => {
     const options = new Set();
@@ -97,6 +97,8 @@ export function SelectColumnFilter({
     });
     return [...options.values()];
   }, [id, preFilteredRows]);
+
+  setFilter(dept);
 
   return (
     <FormControl sx={{ width: '100%' }}>

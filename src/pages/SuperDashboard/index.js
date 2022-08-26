@@ -13,13 +13,14 @@ import { Tab, Tabs } from "@mui/material";
 import LocationwiseData from "./LocationwiseData";
 import CollegewiseData from "./CollegewiseData";
 
+//https://recruit-teacher.herokuapp.com/superadmin/getsuperadmindashboard/locations/:noOfDays
+//https://recruit-teacher.herokuapp.com/superadmin/getsuperadmindashboard/colleges/:noOfDays
+
 const SuperDashboard = () => {
-  const [data, setData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
   const [numDays, setNumDays] = useState(1000);
   const [value, setValue] = useState("one");
 
-  const { isLoggedIn, token, isSuperAdmin } = useSelector(
+  const { isLoggedIn, isSuperAdmin } = useSelector(
     (state) => state.auth
   );
 
@@ -27,35 +28,7 @@ const SuperDashboard = () => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setIsLoading(true);
-      axios
-        .get(
-          `${BASE_URL}superadmin/getsuperadmindashboard/locations/${numDays}`,
-          configToken(token)
-        )
-        .then((response) => {
-          console.log(response.data);
-          setData(response.data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setData([]);
-        });
-    }
-  }, [isLoggedIn, token, isSuperAdmin, numDays]);
-
-  if (isLoading) {
-    return (
-      <Grid container justifyContent="center" sx={{ my: 2 }}>
-        <CircularProgress />
-      </Grid>
-    );
-  }
-
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !isSuperAdmin) {
     return (
       <Box
         sx={{
@@ -73,8 +46,7 @@ const SuperDashboard = () => {
     );
   }
 
-  if (data.length > 0) {
-    return (
+  return (
       <Container component="main" maxWidth="lg">
         <Box
           sx={{
@@ -92,79 +64,9 @@ const SuperDashboard = () => {
             </Tabs>
           </Grid>
           {value === "one" ? <LocationwiseData /> : <CollegewiseData />}
-          {/* <Grid container spacing={2} justifyContent="center" sx={{ my: 2 }}>
-            {data.map((item, index) => (
-              <Grid
-                key={index}
-                item
-                component={Paper}
-                xs={12}
-                md={8}
-                sx={{ mb: 4 }}
-              >
-                <Typography variant="h6" gutterBottom>
-                  {item.collegeName}
-                </Typography>
-                <Grid
-                  container
-                  spacing={2}
-                  justifyContent="center"
-                  sx={{ mt: 1 }}
-                >
-                  <Grid item xs={12} md={3}>
-                    <Typography variant="body1" gutterBottom>
-                      Current Vacancies
-                    </Typography>
-                    <Typography variant="h4" gutterBottom>
-                      {item.currentVacancies}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={3}>
-                    <Typography variant="body1" gutterBottom>
-                      Vacancies Created
-                    </Typography>
-                    <Typography variant="h4" gutterBottom>
-                      {item.createdVacancies}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={3}>
-                    <Typography
-                      variant="body1"
-                      gutterBottom
-                      color={
-                        item.pendingVacancies / item.createdVacancies >= 0.3
-                          ? "red"
-                          : ""
-                      }
-                    >
-                      Pending Vacancies
-                    </Typography>
-                    <Typography
-                      variant="h4"
-                      gutterBottom
-                      color={
-                        item.pendingVacancies / item.createdVacancies >= 0.3
-                          ? "red"
-                          : ""
-                      }
-                    >
-                      {item.pendingVacancies}
-                    </Typography>
-                  </Grid>
-
-                  <Grid item xs={12} md={3}>
-                    <Button variant="contained" color="error" size="small">
-                      Send Reminder
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
-          </Grid> */}
         </Box>
       </Container>
     );
-  }
 };
 
 export default SuperDashboard;

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {useLocation} from "react-router-dom";
 import { useSelector } from "react-redux";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -11,8 +12,22 @@ import Ongoing from "./Ongoing";
 import Pending from "./Pending";
 import Completed from "./Completed";
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
 export default function AdminVacancy() {
   const [value, setValue] = useState("one");
+
+  const {state} = useLocation();
+  const[dept, setDept] = useState(null);
+
+  useEffect(() => {
+    if(state){
+      setDept(state.dept);
+      setValue(state.tab);
+    }
+  },[state]);
 
   const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
 
@@ -65,7 +80,7 @@ export default function AdminVacancy() {
         {value === "one" ? (
           <Pending />
         ) : value === "two" ? (
-          <Ongoing />
+          <Ongoing dept={dept} />
         ) : (
           <Completed />
         )}
