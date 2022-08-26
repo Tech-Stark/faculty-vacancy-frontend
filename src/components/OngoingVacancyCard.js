@@ -3,19 +3,18 @@ import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import { Button, CircularProgress, Grid, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CancelIcon from "@mui/icons-material/Cancel";
-import SendIcon from "@mui/icons-material/Send";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useFormik } from "formik";
+
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL, configToken } from "../utils/api";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,11 +31,33 @@ export default function OngoingVacancyCard({ item }) {
   const [expanded, setExpanded] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isRemoved, setIsRemoved] = React.useState(false);
+  const [rehired, setRehired] = React.useState(false);
   const [isCompleted, setIsCompleted] = React.useState(false);
   const { isLoggedIn, token, isAdmin } = useSelector((state) => state.auth);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleRehire = (values, item) => {
+    if (isLoggedIn && isAdmin) {
+      setIsLoading(true);
+      axios
+        .post(
+          `${BASE_URL}admin/rehire/${item.vacancyId}`,
+          values,
+          configToken(token)
+        )
+        .then((res) => {
+          console.log(res.data);
+          setRehired(true);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err.message);
+          setIsLoading(false);
+        });
+    }
   };
 
   const handleRemove = () => {
@@ -80,6 +101,15 @@ export default function OngoingVacancyCard({ item }) {
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      contractLength: "",
+    },
+    onSubmit: (values) => {
+      handleRehire(values, item);
+    },
+  });
+
   return (
     <Card>
       <CardHeader title={item.position} subheader={item.department} />
@@ -87,9 +117,36 @@ export default function OngoingVacancyCard({ item }) {
         <Typography variant="body2" color="text.secondary">
           College : {item.college}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Location : {item.location}
-        </Typography>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            Location : {item.location}
+          </Typography>
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              size="small"
+              id="contractLength"
+              label="Contract Length"
+              variant="outlined"
+              sx={{ mr: 1, mb: 1 }}
+              onChange={formik.handleChange}
+              value={formik.values.contractLength}
+            />
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              disabled={isLoading || rehired || isCompleted || isRemoved}
+            >
+              Rehire Faculty
+            </Button>
+          </form>
+        </div>
       </CardContent>
 
       {isLoading ? (
@@ -98,7 +155,7 @@ export default function OngoingVacancyCard({ item }) {
         <CardActions disableSpacing>
           <Button
             onClick={handleRemove}
-            disabled={isCompleted || isRemoved}
+            disabled={isCompleted || isRemoved || rehired}
             color="error"
             variant="contained"
             sx={{ ml: 1, mr: 1 }}
@@ -106,7 +163,7 @@ export default function OngoingVacancyCard({ item }) {
             Remove
           </Button>
           <Button
-            disabled={isCompleted || isRemoved}
+            disabled={isCompleted || isRemoved || rehired}
             onClick={handleCompleted}
             color="success"
             variant="contained"
@@ -121,7 +178,7 @@ export default function OngoingVacancyCard({ item }) {
             <Button
               variant="outlined"
               color="primary"
-              disabled={isCompleted || isRemoved}
+              disabled={isCompleted || isRemoved || rehired}
               sx={{ ml: 1, mr: 1 }}
             >
               Send Invite

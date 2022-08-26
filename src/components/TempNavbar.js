@@ -27,13 +27,16 @@ const Adminpages = [
   { Name: "View Teachers", pagePath: "viewteachers" },
   { Name: "Create Vacancy", pagePath: "createvacancy" },
 ];
+const SuperAdminpages = [{ Name: "Dashboard", pagePath: "dashboard" }];
 
 const TempNavbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { isLoggedIn, isAdmin } = useSelector((state) => state.auth);
+  const { isLoggedIn, isAdmin, isSuperAdmin } = useSelector(
+    (state) => state.auth
+  );
 
   const handleLogout = () => {
     if (isLoggedIn) {
@@ -68,7 +71,7 @@ const TempNavbar = () => {
               textDecoration: "none",
             }}
           >
-            SIH2022
+            RECRUITEASY
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -102,7 +105,7 @@ const TempNavbar = () => {
             >
               {isLoggedIn && (
                 <section>
-                  {!isAdmin
+                  {!isAdmin && !isSuperAdmin
                     ? Teacherpages.map((page, index) => (
                         <MenuItem key={index} onClick={handleCloseNavMenu}>
                           <NavLink to={`/${page.pagePath}`}>
@@ -112,9 +115,19 @@ const TempNavbar = () => {
                           </NavLink>
                         </MenuItem>
                       ))
-                    : Adminpages.map((page, index) => (
+                    : isAdmin
+                    ? Adminpages.map((page, index) => (
                         <MenuItem key={index} onClick={handleCloseNavMenu}>
                           <NavLink to={`/admin/${page.pagePath}`}>
+                            <Typography textAlign="center">
+                              {page.Name}
+                            </Typography>
+                          </NavLink>
+                        </MenuItem>
+                      ))
+                    : SuperAdminpages.map((page, index) => (
+                        <MenuItem key={index} onClick={handleCloseNavMenu}>
+                          <NavLink to={`/superadmin/${page.pagePath}`}>
                             <Typography textAlign="center">
                               {page.Name}
                             </Typography>
@@ -128,26 +141,34 @@ const TempNavbar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {isLoggedIn && (
               <>
-                {!isAdmin
+                {!isAdmin && !isSuperAdmin
                   ? Teacherpages.map((page, index) => (
-                      <NavLink to={`/${page.pagePath}`} key={index}>
-                        <Button
-                          onClick={handleCloseNavMenu}
-                          sx={{ my: 2, color: "white", display: "block" }}
-                        >
-                          {page.Name}
-                        </Button>
-                      </NavLink>
+                      <MenuItem key={index} onClick={handleCloseNavMenu}>
+                        <NavLink to={`/${page.pagePath}`}>
+                          <Typography textAlign="center" color="white">
+                            {page.Name}
+                          </Typography>
+                        </NavLink>
+                      </MenuItem>
                     ))
-                  : Adminpages.map((page, index) => (
-                      <NavLink to={`/admin/${page.pagePath}`} key={index}>
-                        <Button
-                          onClick={handleCloseNavMenu}
-                          sx={{ my: 2, color: "white", display: "block" }}
-                        >
-                          {page.Name}
-                        </Button>
-                      </NavLink>
+                  : isAdmin
+                  ? Adminpages.map((page, index) => (
+                      <MenuItem key={index} onClick={handleCloseNavMenu}>
+                        <NavLink to={`/admin/${page.pagePath}`}>
+                          <Typography textAlign="center" color="white">
+                            {page.Name}
+                          </Typography>
+                        </NavLink>
+                      </MenuItem>
+                    ))
+                  : SuperAdminpages.map((page, index) => (
+                      <MenuItem key={index} onClick={handleCloseNavMenu}>
+                        <NavLink to={`/superadmin/${page.pagePath}`}>
+                          <Typography textAlign="center" color="white">
+                            {page.Name}
+                          </Typography>
+                        </NavLink>
+                      </MenuItem>
                     ))}
               </>
             )}

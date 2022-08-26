@@ -54,7 +54,9 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, isLoggedIn, isAdmin, isSuperAdmin } = useSelector((state) => state.auth);
+  const { isLoading, isLoggedIn, isAdmin, isSuperAdmin } = useSelector(
+    (state) => state.auth
+  );
 
   const handleSubmit = (values, resetForm) => {
     console.log(values);
@@ -62,16 +64,17 @@ const Login = () => {
     axios
       .post(`${BASE_URL}users/login`, values, configToken())
       .then((res) => {
-        if(res.data.error){
+        if (res.data.error) {
           dispatch(setLoading(false));
           dispatch(addToast({ type: "error", message: res.data.error }));
-        }
-        else{
+        } else {
           console.log(res.data);
           dispatch(setLoading(false));
           dispatch(signIn(res.data));
           resetForm();
-          dispatch(addToast({type: 'success', message: 'Successfully logged in!'}));
+          dispatch(
+            addToast({ type: "success", message: "Successfully logged in!" })
+          );
         }
       })
       .catch((err) => {
@@ -81,100 +84,103 @@ const Login = () => {
       });
   };
 
-  if(isLoggedIn && !isAdmin){
+  if (isLoggedIn && !isAdmin) {
     return <Navigate to="/vacancy" replace />;
-  }
-
-  else if(isLoggedIn && isAdmin){
+  } else if (isLoggedIn && isAdmin) {
     return <Navigate to="/admin/vacancy" replace />;
-  }
-
-  else if(isLoggedIn && isSuperAdmin){
+  } else if (isLoggedIn && isSuperAdmin) {
     return <Navigate to="/superadmin/dashboard" replace />;
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component={Paper} maxWidth="xs" sx={{backgroundColor: 'white', py: 1, my: 10, borderRadius: 5}}>
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 4,
-            marginBottom: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+    <div className="hero-container">
+      <ThemeProvider theme={theme}>
+        <Container
+          component={Paper}
+          maxWidth="xs"
+          sx={{ backgroundColor: "white", py: 1, my: 10, borderRadius: 5 }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 4,
+              marginBottom: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Login
+            </Typography>
 
-          <Box sx={{ mt: 3 }}>
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validationSchema={Yup.object({
-                email: Yup.string()
-                  .email("Invalid email address!")
-                  .required("This field is required!"),
-                password: Yup.string()
-                  .min(8, "Password is minimum 8 characters in length.")
-                  .required("This field is required!"),
-              })}
-              onSubmit={(values, {resetForm})=> handleSubmit(values, resetForm)}
-            >
-              <Form>
-                <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                    <MyTextInput
-                      label="Email Address"
-                      id="email"
-                      name="email"
-                      type="email"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <EmailIcon fontSize="small" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
+            <Box sx={{ mt: 3 }}>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                validationSchema={Yup.object({
+                  email: Yup.string()
+                    .email("Invalid email address!")
+                    .required("This field is required!"),
+                  password: Yup.string()
+                    .min(8, "Password is minimum 8 characters in length.")
+                    .required("This field is required!"),
+                })}
+                onSubmit={(values, { resetForm }) =>
+                  handleSubmit(values, resetForm)
+                }
+              >
+                <Form>
+                  <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                      <MyTextInput
+                        label="Email Address"
+                        id="email"
+                        name="email"
+                        type="email"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <EmailIcon fontSize="small" />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <MyTextInput
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => setShowPassword(!showPassword)}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff fontSize="small" />
+                                ) : (
+                                  <Visibility fontSize="small" />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <MyTextInput
-                      label="Password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={() => setShowPassword(!showPassword)}
-                              edge="end"
-                            >
-                              {showPassword ? (
-                                <VisibilityOff fontSize="small" />
-                              ) : (
-                                <Visibility fontSize="small" />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-
-                {/* <Grid container>
+                  {/* <Grid container>
                   <Grid item xs>
                     <Link to="/login" style={{ textDecoration: "none" }}>
                       Forgot password?
@@ -182,38 +188,39 @@ const Login = () => {
                   </Grid>
                 </Grid> */}
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  disabled={isLoading ? true : false}
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  {isLoading ? (
-                    <CircularProgress color="primary" size={25} />
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
-              </Form>
-            </Formik>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    disabled={isLoading ? true : false}
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    {isLoading ? (
+                      <CircularProgress color="primary" size={25} />
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </Form>
+              </Formik>
 
-            <Grid container>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/signup" style={{ textDecoration: "none" }}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
+              <Grid container>
+                <Grid item xs={12} style={{ textAlign: "center" }}>
+                  <Link to="/signup" style={{ textDecoration: "none" }}>
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+                <Grid item xs={12} style={{ textAlign: "center" }}>
+                  <Link to="/admin/login" style={{ textDecoration: "none" }}>
+                    {"Admin Login"}
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <Link to="/admin/login" style={{ textDecoration: "none" }}>
-                  {"Admin Login"}
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </div>
   );
 };
 
